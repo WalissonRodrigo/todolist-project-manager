@@ -1,0 +1,45 @@
+{
+  "name": "todolist_project_manager",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@formatjs/intl-relativetimeformat": "4.x",
+    "@material-ui/core": "4.x",
+    "@material-ui/icons": "4.x",
+    "base-shell": "1.x",
+    "github-markdown-css": "4.x",
+    "intl": "1.x",
+    "intl-locales-supported": "1.x",
+    "material-ui-shell": "1.x",
+    "react": "16.x",
+    "react-custom-scrollbars": "4.x",
+    "react-dom": "16.x",
+    "react-intl": "4.x",
+    "react-ios-pwa-prompt": "1.x",
+    "react-markdown": "4.x",
+    "react-redux": "7.x",
+    "react-router-dom": "5.x",
+    "react-scripts": "3.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
