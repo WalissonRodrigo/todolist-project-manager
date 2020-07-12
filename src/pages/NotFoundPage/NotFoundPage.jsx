@@ -6,7 +6,7 @@ import { Fab, Box } from "@material-ui/core";
 
 import { Home as HomeIcon } from "@material-ui/icons";
 
-import EmptyState from "../EmptyState";
+import EmptyState from "../../components/EmptyState";
 
 import { ReactComponent as NotFoundIllustration } from "../../illustrations/not-found.svg";
 
@@ -15,14 +15,14 @@ class NotFoundPage extends Component {
     return (
       <EmptyState
         image={<NotFoundIllustration />}
-        title="Page doesn’t exist"
-        description="The page you’re trying to access doesn’t exist"
+        title="A página não existe"
+        description="A página que você está tentando acessar não existe"
         button={
           <Fab variant="extended" color="primary" component={Link} to="/">
             <Box clone mr={1}>
               <HomeIcon />
             </Box>
-            Home
+            Página Inicial
           </Fab>
         }
       />

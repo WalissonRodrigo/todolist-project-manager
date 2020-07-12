@@ -10,10 +10,10 @@ import { Refresh as RefreshIcon, Home as HomeIcon } from "@material-ui/icons";
 
 import { firestore } from "../../firebase";
 
-import EmptyState from "../EmptyState";
+import EmptyState from "../../components/EmptyState";
 
-import Loader from "../Loader";
-import UserCard from "../UserCard";
+import Loader from "../../components/Loader";
+import UserCard from "../../components/UserCard";
 
 import { ReactComponent as ErrorIllustration } from "../../illustrations/error.svg";
 import { ReactComponent as NoDataIllustration } from "../../illustrations/no-data.svg";
@@ -52,8 +52,8 @@ function UserPage() {
     return (
       <EmptyState
         image={<ErrorIllustration />}
-        title="Couldn’t retrieve user"
-        description="Something went wrong when trying to retrieve the requested user"
+        title="Não foi possível recuperar o usuário"
+        description="Ocorreu um erro ao tentar recuperar o usuário solicitado"
         button={
           <Fab
             variant="extended"
@@ -63,7 +63,7 @@ function UserPage() {
             <Box clone mr={1}>
               <RefreshIcon />
             </Box>
-            Retry
+            Tentar Novamente
           </Fab>
         }
       />
@@ -78,14 +78,14 @@ function UserPage() {
     return (
       <EmptyState
         image={<NoDataIllustration />}
-        title="User doesn’t exist"
-        description="The requested user doesn’t exist"
+        title="Usuário não existe"
+        description="O usuário solicitado não existe"
         button={
           <Fab variant="extended" color="primary" component={Link} to="/">
             <Box clone mr={1}>
               <HomeIcon />
             </Box>
-            Home
+            Página Inicial
           </Fab>
         }
       />

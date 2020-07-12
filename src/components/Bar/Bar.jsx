@@ -65,19 +65,19 @@ class Bar extends Component {
 
     const menuItems = [
       {
-        name: "About",
+        name: "Sobre",
         onClick: onAboutClick,
       },
       {
-        name: "Profile",
+        name: "Perfil",
         to: user ? `/user/${user.uid}` : null,
       },
       {
-        name: "Settings",
+        name: "Configurações",
         onClick: onSettingsClick,
       },
       {
-        name: "Sign out",
+        name: "Sair",
         divide: true,
         onClick: onSignOutClick,
       },
@@ -178,8 +178,8 @@ class Bar extends Component {
               disabled={performingAction}
               variant="outlined"
             >
-              <Button onClick={onSignUpClick}>Sign up</Button>
-              <Button onClick={onSignInClick}>Sign in</Button>
+              <Button onClick={onSignUpClick}>Registrar</Button>
+              <Button onClick={onSignInClick}>Entrar</Button>
             </ButtonGroup>
           )}
         </Toolbar>

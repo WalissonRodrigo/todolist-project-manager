@@ -260,7 +260,7 @@ class AppearanceTab extends Component {
                 variant="outlined"
               >
                 <InputLabel ref={this.primaryColorLabel}>
-                  Primary color
+                  Cor primária
                 </InputLabel>
 
                 <Hidden smUp>
@@ -317,7 +317,7 @@ class AppearanceTab extends Component {
                 variant="outlined"
               >
                 <InputLabel ref={this.secondaryColorLabel}>
-                  Secondary color
+                  Cor secundária
                 </InputLabel>
 
                 <Hidden smUp>
@@ -368,8 +368,8 @@ class AppearanceTab extends Component {
             </Hidden>
 
             <ListItemText
-              primary="Dark mode"
-              secondary="Displays mostly dark surfaces"
+              primary="Modo escuro"
+              secondary="Exibe principalmente superfícies escuras"
             />
 
             <ListItemSecondaryAction>
@@ -403,11 +403,11 @@ class AppearanceTab extends Component {
             </Hidden>
 
             <ListItemText
-              primary="Reset theme"
+              primary="Redefinir tema"
               secondary={
                 appearance.isDefaultTheme(theme)
-                  ? "No changes made"
-                  : "Changes will be reset"
+                  ? "Nenhuma alteração realizada ainda"
+                  : "As alterações serão redefinidas"
               }
             />
 
@@ -418,7 +418,7 @@ class AppearanceTab extends Component {
                 variant="contained"
                 onClick={this.handleResetThemeClick}
               >
-                Reset
+                Redefinir
               </Button>
             </ListItemSecondaryAction>
           </ListItem>

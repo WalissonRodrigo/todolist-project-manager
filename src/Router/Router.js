@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 
 import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
 
-import HomePage from "../HomePage";
-import AdminPage from "../AdminPage";
-import UserPage from "../UserPage";
-import NotFoundPage from "../NotFoundPage";
+import HomePage from "../pages/HomePage";
+import AdminPage from "../pages/AdminPage";
+import UserPage from "../pages/UserPage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 class Router extends Component {
   render() {

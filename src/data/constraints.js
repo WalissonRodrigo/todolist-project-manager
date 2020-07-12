@@ -30,7 +30,7 @@ const constraints = {
 
   emailAddress: {
     email: {
-      message: "^E-mail address is invalid",
+      message: "^Endereço de email inválido",
     },
 
     presence: {
@@ -42,12 +42,13 @@ const constraints = {
 
   emailAddressConfirmation: {
     email: {
-      message: "^E-mail address confirmation is invalid",
+      message: "^A confirmação do endereço de email é inválida",
     },
 
     equality: {
       attribute: "emailAddress",
-      message: "^E-mail address confirmation is not equal to e-mail address",
+      message:
+        "^A confirmação do endereço de email não é igual ao endereço de email",
     },
 
     presence: {

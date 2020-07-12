@@ -13,7 +13,7 @@ import appearance from "../../services/appearance";
 import ErrorBoundary from "../ErrorBoundary";
 import LaunchScreen from "../LaunchScreen";
 import Bar from "../Bar";
-import Router from "../Router";
+import Router from "../../Router";
 import DialogHost from "../DialogHost";
 
 const initialState = {
@@ -160,7 +160,7 @@ class App extends Component {
           .deleteAccount()
           .then(() => {
             this.closeAllDialogs(() => {
-              this.openSnackbar("Deleted account");
+              this.openSnackbar("Conta excluída");
             });
           })
           .catch((reason) => {
@@ -368,15 +368,15 @@ class App extends Component {
                     },
 
                     props: {
-                      title: "Sign out?",
+                      title: "Sair?",
                       contentText:
-                        "While signed out you are unable to manage your profile and conduct other activities that require you to be signed in.",
+                        "Enquanto estiver desconectado, você não poderá gerenciar seu perfil e realizar outras atividades que exigem que você esteja conectado.",
                       dismissiveAction: (
                         <Button
                           color="primary"
                           onClick={() => this.closeDialog("signOutDialog")}
                         >
-                          Cancel
+                          Cancelar
                         </Button>
                       ),
                       confirmingAction: (
@@ -386,7 +386,7 @@ class App extends Component {
                           variant="contained"
                           onClick={this.signOut}
                         >
-                          Sign Out
+                          Deslogar
                         </Button>
                       ),
                     },

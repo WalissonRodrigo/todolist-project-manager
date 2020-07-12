@@ -45,13 +45,13 @@ const tabs = [
   {
     key: "account",
     icon: <AccountCircleIcon />,
-    label: "Account",
+    label: "Conta",
   },
 
   {
     key: "appearance",
     icon: <PaletteIcon />,
-    label: "Appearance",
+    label: "Aparência",
   },
 
   {
@@ -63,7 +63,7 @@ const tabs = [
   {
     key: "security",
     icon: <SecurityIcon />,
-    label: "Security",
+    label: "Segurança",
   },
 ];
 
@@ -115,9 +115,9 @@ class SettingsDialog extends Component {
     return (
       <Dialog {...dialogProps} onExited={this.handleExited}>
         <DialogTitle disableTypography>
-          <Typography variant="h6">Settings</Typography>
+          <Typography variant="h6">Configurações</Typography>
 
-          <Tooltip title="Close">
+          <Tooltip title="Fechar">
             <IconButton
               className={classes.closeButton}
               onClick={dialogProps.onClose}

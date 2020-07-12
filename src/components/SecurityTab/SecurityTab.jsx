@@ -141,7 +141,7 @@ class SecurityTab extends Component {
               .changePassword(password)
               .then(() => {
                 this.hideFields(() => {
-                  this.props.openSnackbar("Changed password");
+                  this.props.openSnackbar("Senha alterada");
                 });
               })
               .catch((reason) => {
@@ -245,9 +245,9 @@ class SecurityTab extends Component {
                 helperText={
                   errors && errors.password
                     ? errors.password[0]
-                    : "Press Enter to change your password"
+                    : "Pressione Enter para alterar sua senha"
                 }
-                label="Password"
+                label="Senha"
                 required
                 type="password"
                 value={password}
@@ -269,9 +269,9 @@ class SecurityTab extends Component {
                 helperText={
                   errors && errors.passwordConfirmation
                     ? errors.passwordConfirmation[0]
-                    : "Press Enter to change your password"
+                    : "Pressione Enter para alterar sua senha"
                 }
-                label="Password confirmation"
+                label="Confirmação da Senha"
                 required
                 type="password"
                 value={passwordConfirmation}
@@ -290,26 +290,26 @@ class SecurityTab extends Component {
                 <>
                   <Hidden xsDown>
                     <ListItemText
-                      primary="Password"
+                      primary="Senha"
                       secondary={
                         hasChangedPassword
                           ? `Last changed ${moment(
                               userData.lastPasswordChange.toDate()
                             ).format("LL")}`
-                          : "Never changed"
+                          : "Nunca mudou"
                       }
                     />
                   </Hidden>
 
                   <Hidden smUp>
                     <ListItemText
-                      primary="Password"
+                      primary="Senha"
                       secondary={
                         hasChangedPassword
                           ? `Last changed ${moment(
                               userData.lastPasswordChange.toDate()
                             ).format("ll")}`
-                          : "Never changed"
+                          : "Nunca mudou"
                       }
                     />
                   </Hidden>

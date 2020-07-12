@@ -51,122 +51,39 @@ const styles = (theme) => ({
 const initialState = {
   performingAction: false,
   emailAddress: "",
+  emailAddressConfirmation: "",
   password: "",
+  passwordConfirmation: "",
   errors: null,
 };
 
-class SignInDialog extends Component {
+class SignUpDialog extends Component {
   constructor(props) {
     super(props);
 
     this.state = initialState;
   }
 
-  getSignInButton = () => {
-    const { emailAddress, password, performingAction } = this.state;
-
-    if (emailAddress && !password) {
-      return (
-        <Button
-          color="primary"
-          disabled={!emailAddress || performingAction}
-          variant="contained"
-          onClick={() => this.sendSignInLinkToEmail()}
-        >
-          Send sign-in link
-        </Button>
-      );
-    }
-
-    return (
-      <Button
-        color="primary"
-        disabled={!emailAddress || performingAction}
-        variant="contained"
-        onClick={() => this.signIn()}
-      >
-        Sign in
-      </Button>
-    );
-  };
-
-  resetPassword = () => {
-    const { emailAddress } = this.state;
+  signUp = () => {
+    const {
+      emailAddress,
+      emailAddressConfirmation,
+      password,
+      passwordConfirmation,
+    } = this.state;
 
     const errors = validate(
       {
         emailAddress: emailAddress,
-      },
-      {
-        emailAddress: constraints.emailAddress,
-      }
-    );
-
-    if (errors) {
-      this.setState({
-        errors: errors,
-      });
-    } else {
-      this.setState(
-        {
-          errors: null,
-        },
-        () => {
-          this.setState(
-            {
-              performingAction: true,
-            },
-            () => {
-              authentication
-                .resetPassword(emailAddress)
-                .then((value) => {
-                  this.props.openSnackbar(
-                    `Sent password reset e-mail to ${emailAddress}`
-                  );
-                })
-                .catch((reason) => {
-                  const code = reason.code;
-                  const message = reason.message;
-
-                  switch (code) {
-                    case "auth/invalid-email":
-                    case "auth/missing-android-pkg-name":
-                    case "auth/missing-continue-uri":
-                    case "auth/missing-ios-bundle-id":
-                    case "auth/invalid-continue-uri":
-                    case "auth/unauthorized-continue-uri":
-                    case "auth/user-not-found":
-                      this.props.openSnackbar(message);
-                      return;
-
-                    default:
-                      this.props.openSnackbar(message);
-                      return;
-                  }
-                })
-                .finally(() => {
-                  this.setState({
-                    performingAction: false,
-                  });
-                });
-            }
-          );
-        }
-      );
-    }
-  };
-
-  signIn = () => {
-    const { emailAddress, password } = this.state;
-
-    const errors = validate(
-      {
-        emailAddress: emailAddress,
+        emailAddressConfirmation: emailAddressConfirmation,
         password: password,
+        passwordConfirmation: passwordConfirmation,
       },
       {
         emailAddress: constraints.emailAddress,
+        emailAddressConfirmation: constraints.emailAddressConfirmation,
         password: constraints.password,
+        passwordConfirmation: constraints.passwordConfirmation,
       }
     );
 
@@ -182,26 +99,19 @@ class SignInDialog extends Component {
         },
         () => {
           authentication
-            .signIn(emailAddress, password)
-            .then((user) => {
-              this.props.dialogProps.onClose(() => {
-                const displayName = user.displayName;
-                const emailAddress = user.email;
-
-                this.props.openSnackbar(
-                  `Signed in as ${displayName || emailAddress}`
-                );
-              });
+            .signUpWithEmailAddressAndPassword(emailAddress, password)
+            .then((value) => {
+              this.props.dialogProps.onClose();
             })
             .catch((reason) => {
               const code = reason.code;
               const message = reason.message;
 
               switch (code) {
+                case "auth/email-already-in-use":
                 case "auth/invalid-email":
-                case "auth/user-disabled":
-                case "auth/user-not-found":
-                case "auth/wrong-password":
+                case "auth/operation-not-allowed":
+                case "auth/weak-password":
                   this.props.openSnackbar(message);
                   return;
 
@@ -220,68 +130,6 @@ class SignInDialog extends Component {
     }
   };
 
-  sendSignInLinkToEmail = () => {
-    const { emailAddress } = this.state;
-
-    const errors = validate(
-      {
-        emailAddress: emailAddress,
-      },
-      {
-        emailAddress: constraints.emailAddress,
-      }
-    );
-
-    if (errors) {
-      this.setState({
-        errors: errors,
-      });
-
-      return;
-    }
-
-    this.setState(
-      {
-        performingAction: true,
-        errors: null,
-      },
-      () => {
-        authentication
-          .sendSignInLinkToEmail(emailAddress)
-          .then(() => {
-            this.props.dialogProps.onClose(() => {
-              this.props.openSnackbar(`Sent sign-in e-mail to ${emailAddress}`);
-            });
-          })
-          .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              case "auth/argument-error":
-              case "auth/invalid-email":
-              case "auth/missing-android-pkg-name":
-              case "auth/missing-continue-uri":
-              case "auth/missing-ios-bundle-id":
-              case "auth/invalid-continue-uri":
-              case "auth/unauthorized-continue-uri":
-                this.props.openSnackbar(message);
-                return;
-
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
-          })
-          .finally(() => {
-            this.setState({
-              performingAction: false,
-            });
-          });
-      }
-    );
-  };
-
   signInWithAuthProvider = (provider) => {
     this.setState(
       {
@@ -296,7 +144,7 @@ class SignInDialog extends Component {
               const emailAddress = user.email;
 
               this.props.openSnackbar(
-                `Signed in as ${displayName || emailAddress}`
+                `Você entrou como ${displayName || emailAddress}`
               );
             });
           })
@@ -305,13 +153,39 @@ class SignInDialog extends Component {
             const message = reason.message;
 
             switch (code) {
+              case "auth/invalid-credential":
+                this.props.openSnackbar(
+                  "Esta operação é sensível e requer autenticação recente. Efetue login novamente antes de tentar novamente esta solicitação."
+                );
+                return;
+              case "auth/user-not-found":
+                this.props.openSnackbar(
+                  "Não há registro de usuário existente correspondente ao identificador fornecido."
+                );
+                return;
               case "auth/account-exists-with-different-credential":
+                this.props.openSnackbar(
+                  "Essa conta já existe com credenciais diferentes."
+                );
+                return;
+              case "auth/operation-not-allowed":
+                this.props.openSnackbar(
+                  "O método de login usado não está habilitado para este projeto."
+                );
+                return;
+              case "auth/popup-blocked":
+                this.props.openSnackbar(
+                  "Pop-up do navegador bloqueado. Após liberar os pop-ups tente novamente."
+                );
+                return;
+              case "auth/popup-closed-by-user":
+                this.props.openSnackbar(
+                  "O pop-up foi fechado pelo usuário antes de finalizar a operação."
+                );
+                return;
               case "auth/auth-domain-config-required":
               case "auth/cancelled-popup-request":
-              case "auth/operation-not-allowed":
               case "auth/operation-not-supported-in-this-environment":
-              case "auth/popup-blocked":
-              case "auth/popup-closed-by-user":
               case "auth/unauthorized-domain":
                 this.props.openSnackbar(message);
                 return;
@@ -331,9 +205,19 @@ class SignInDialog extends Component {
   };
 
   handleKeyPress = (event) => {
-    const { emailAddress, password } = this.state;
+    const {
+      emailAddress,
+      emailAddressConfirmation,
+      password,
+      passwordConfirmation,
+    } = this.state;
 
-    if (!emailAddress && !password) {
+    if (
+      !emailAddress ||
+      !emailAddressConfirmation ||
+      !password ||
+      !passwordConfirmation
+    ) {
       return;
     }
 
@@ -344,11 +228,7 @@ class SignInDialog extends Component {
     }
 
     if (key === "Enter") {
-      if (emailAddress && !password) {
-        this.sendSignInLinkToEmail();
-      } else {
-        this.signIn();
-      }
+      this.signUp();
     }
   };
 
@@ -364,11 +244,27 @@ class SignInDialog extends Component {
     });
   };
 
+  handleEmailAddressConfirmationChange = (event) => {
+    const emailAddressConfirmation = event.target.value;
+
+    this.setState({
+      emailAddressConfirmation: emailAddressConfirmation,
+    });
+  };
+
   handlePasswordChange = (event) => {
     const password = event.target.value;
 
     this.setState({
       password: password,
+    });
+  };
+
+  handlePasswordConfirmationChange = (event) => {
+    const passwordConfirmation = event.target.value;
+
+    this.setState({
+      passwordConfirmation: passwordConfirmation,
     });
   };
 
@@ -379,7 +275,14 @@ class SignInDialog extends Component {
     // Dialog Properties
     const { dialogProps } = this.props;
 
-    const { performingAction, emailAddress, password, errors } = this.state;
+    const {
+      performingAction,
+      emailAddress,
+      emailAddressConfirmation,
+      password,
+      passwordConfirmation,
+      errors,
+    } = this.state;
 
     return (
       <Dialog
@@ -392,7 +295,7 @@ class SignInDialog extends Component {
         onExited={this.handleExited}
       >
         <DialogTitle disableTypography>
-          <Typography variant="h6">Sign in to your account</Typography>
+          <Typography variant="h6">Crie sua conta agora mesmo</Typography>
 
           <Tooltip title="Close">
             <IconButton
@@ -405,8 +308,8 @@ class SignInDialog extends Component {
           </Tooltip>
         </DialogTitle>
 
-        <DialogContent>
-          <Hidden xsDown>
+        <Hidden xsDown>
+          <DialogContent>
             <Grid container direction="row">
               <Grid item xs={4}>
                 <AuthProviderList
@@ -432,8 +335,8 @@ class SignInDialog extends Component {
                           ? errors.emailAddress[0]
                           : ""
                       }
-                      label="E-mail address"
-                      placeholder="john@doe.com"
+                      label="Endereço de e-mail"
+                      placeholder="email@exemplo.com"
                       required
                       type="email"
                       value={emailAddress}
@@ -445,14 +348,36 @@ class SignInDialog extends Component {
 
                   <Grid item xs>
                     <TextField
-                      autoComplete="current-password"
+                      autoComplete="email"
+                      disabled={performingAction}
+                      error={!!(errors && errors.emailAddressConfirmation)}
+                      fullWidth
+                      helperText={
+                        errors && errors.emailAddressConfirmation
+                          ? errors.emailAddressConfirmation[0]
+                          : ""
+                      }
+                      label="Confirmação do e-mail"
+                      placeholder="email@exemplo.com"
+                      required
+                      type="email"
+                      value={emailAddressConfirmation}
+                      variant="outlined"
+                      InputLabelProps={{ required: false }}
+                      onChange={this.handleEmailAddressConfirmationChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs>
+                    <TextField
+                      autoComplete="new-password"
                       disabled={performingAction}
                       error={!!(errors && errors.password)}
                       fullWidth
                       helperText={
                         errors && errors.password ? errors.password[0] : ""
                       }
-                      label="Password"
+                      label="Senha"
                       placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
                       required
                       type="password"
@@ -462,12 +387,36 @@ class SignInDialog extends Component {
                       onChange={this.handlePasswordChange}
                     />
                   </Grid>
+
+                  <Grid item xs>
+                    <TextField
+                      autoComplete="password"
+                      disabled={performingAction}
+                      error={!!(errors && errors.passwordConfirmation)}
+                      fullWidth
+                      helperText={
+                        errors && errors.passwordConfirmation
+                          ? errors.passwordConfirmation[0]
+                          : ""
+                      }
+                      label="Confirmação da Senha"
+                      placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                      required
+                      type="password"
+                      value={passwordConfirmation}
+                      variant="outlined"
+                      InputLabelProps={{ required: false }}
+                      onChange={this.handlePasswordConfirmationChange}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Hidden>
+          </DialogContent>
+        </Hidden>
 
-          <Hidden smUp>
+        <Hidden smUp>
+          <DialogContent>
             <AuthProviderList
               gutterBottom
               performingAction={performingAction}
@@ -484,8 +433,8 @@ class SignInDialog extends Component {
                   helperText={
                     errors && errors.emailAddress ? errors.emailAddress[0] : ""
                   }
-                  label="E-mail address"
-                  placeholder="john@doe.com"
+                  label="Endereço de E-mail"
+                  placeholder="email@exemplo.com"
                   required
                   type="email"
                   value={emailAddress}
@@ -497,14 +446,36 @@ class SignInDialog extends Component {
 
               <Grid item xs>
                 <TextField
-                  autoComplete="current-password"
+                  autoComplete="email"
+                  disabled={performingAction}
+                  error={!!(errors && errors.emailAddressConfirmation)}
+                  fullWidth
+                  helperText={
+                    errors && errors.emailAddressConfirmation
+                      ? errors.emailAddressConfirmation[0]
+                      : ""
+                  }
+                  label="Confirmação do e-mail"
+                  placeholder="email@exemplo.com"
+                  required
+                  type="email"
+                  value={emailAddressConfirmation}
+                  variant="outlined"
+                  InputLabelProps={{ required: false }}
+                  onChange={this.handleEmailAddressConfirmationChange}
+                />
+              </Grid>
+
+              <Grid item xs>
+                <TextField
+                  autoComplete="new-password"
                   disabled={performingAction}
                   error={!!(errors && errors.password)}
                   fullWidth
                   helperText={
                     errors && errors.password ? errors.password[0] : ""
                   }
-                  label="Password"
+                  label="Senha"
                   placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
                   required
                   type="password"
@@ -514,28 +485,54 @@ class SignInDialog extends Component {
                   onChange={this.handlePasswordChange}
                 />
               </Grid>
+
+              <Grid item xs>
+                <TextField
+                  autoComplete="password"
+                  disabled={performingAction}
+                  error={!!(errors && errors.passwordConfirmation)}
+                  fullWidth
+                  helperText={
+                    errors && errors.passwordConfirmation
+                      ? errors.passwordConfirmation[0]
+                      : ""
+                  }
+                  label="Confirmação da Senha"
+                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                  required
+                  type="password"
+                  value={passwordConfirmation}
+                  variant="outlined"
+                  InputLabelProps={{ required: false }}
+                  onChange={this.handlePasswordConfirmationChange}
+                />
+              </Grid>
             </Grid>
-          </Hidden>
-        </DialogContent>
+          </DialogContent>
+        </Hidden>
 
         <DialogActions>
           <Button
             color="primary"
-            disabled={!emailAddress || performingAction}
-            variant="outlined"
-            onClick={this.resetPassword}
+            disabled={
+              !emailAddress ||
+              !emailAddressConfirmation ||
+              !password ||
+              !passwordConfirmation ||
+              performingAction
+            }
+            variant="contained"
+            onClick={this.signUp}
           >
-            Reset password
+            Registrar
           </Button>
-
-          {this.getSignInButton()}
         </DialogActions>
       </Dialog>
     );
   }
 }
 
-SignInDialog.propTypes = {
+SignUpDialog.propTypes = {
   // Styling
   classes: PropTypes.object.isRequired,
 
@@ -546,4 +543,4 @@ SignInDialog.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(SignInDialog);
+export default withStyles(styles)(SignUpDialog);

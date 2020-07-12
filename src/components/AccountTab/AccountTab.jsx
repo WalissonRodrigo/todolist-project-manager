@@ -779,7 +779,7 @@ class AccountTab extends Component {
                       <Badge
                         classes={{ badge: classes.badge }}
                         badgeContent={
-                          <Tooltip title="Remove">
+                          <Tooltip title="Remover">
                             <Fab
                               classes={{ sizeSmall: classes.small }}
                               color="secondary"
@@ -829,7 +829,7 @@ class AccountTab extends Component {
                           <Badge
                             classes={{ badge: classes.badge }}
                             badgeContent={
-                              <Tooltip title="Remove">
+                              <Tooltip title="Remover">
                                 <Fab
                                   classes={{ sizeSmall: classes.small }}
                                   color="secondary"
@@ -919,7 +919,7 @@ class AccountTab extends Component {
                       variant="contained"
                       onClick={this.uploadAvatar}
                     >
-                      Upload
+                      Enviar Foto
                     </Button>
                   )}
 
@@ -941,7 +941,7 @@ class AccountTab extends Component {
                           startIcon={<PhotoIcon />}
                           variant="contained"
                         >
-                          Choose...
+                          Localizar...
                         </Button>
                       </label>
                     </>
@@ -951,7 +951,7 @@ class AccountTab extends Component {
 
               <Grid item xs>
                 <Box textAlign="center">
-                  <Typography variant="body1">Profile completion</Typography>
+                  <Typography variant="body1">Conclusão do perfil</Typography>
 
                   {profileCompletion === 0 && (
                     <Typography color="error" variant="h5">
@@ -975,7 +975,9 @@ class AccountTab extends Component {
 
               <Grid item xs>
                 <Box textAlign="center">
-                  <Typography variant="body1">Security rating</Typography>
+                  <Typography variant="body1">
+                    Classificação de segurança
+                  </Typography>
 
                   {securityRating === 0 && (
                     <Typography color="error" variant="h5">
@@ -1006,7 +1008,7 @@ class AccountTab extends Component {
                   <Badge
                     classes={{ badge: classes.badge }}
                     badgeContent={
-                      <Tooltip title="Remove">
+                      <Tooltip title="Remover">
                         <Fab
                           classes={{ sizeSmall: classes.small }}
                           color="secondary"
@@ -1056,7 +1058,7 @@ class AccountTab extends Component {
                       <Badge
                         classes={{ badge: classes.badge }}
                         badgeContent={
-                          <Tooltip title="Remove">
+                          <Tooltip title="Remover">
                             <Fab
                               classes={{ sizeSmall: classes.small }}
                               color="secondary"
@@ -1134,7 +1136,7 @@ class AccountTab extends Component {
                   variant="contained"
                   onClick={this.uploadAvatar}
                 >
-                  Upload
+                  Enviar Foto
                 </Button>
               )}
 
@@ -1156,7 +1158,7 @@ class AccountTab extends Component {
                       startIcon={<PhotoIcon />}
                       variant="contained"
                     >
-                      Choose...
+                      Escolher...
                     </Button>
                   </label>
                 </>
@@ -1166,7 +1168,7 @@ class AccountTab extends Component {
             <Grid container>
               <Grid item xs>
                 <Box textAlign="center">
-                  <Typography variant="body1">Profile completion</Typography>
+                  <Typography variant="body1">Conclusão do perfil</Typography>
 
                   {profileCompletion === 0 && (
                     <Typography color="error" variant="h5">
@@ -1190,7 +1192,9 @@ class AccountTab extends Component {
 
               <Grid item xs>
                 <Box textAlign="center">
-                  <Typography variant="body1">Security rating</Typography>
+                  <Typography variant="body1">
+                    Classificação de segurança
+                  </Typography>
 
                   {securityRating === 0 && (
                     <Typography color="error" variant="h5">
@@ -1225,7 +1229,7 @@ class AccountTab extends Component {
 
             {!hasFirstName && (
               <ListItemIcon>
-                <Tooltip title="No first name">
+                <Tooltip title="Sem primeiro nome">
                   <WarningIcon color="error" />
                 </Tooltip>
               </ListItemIcon>
@@ -1241,9 +1245,9 @@ class AccountTab extends Component {
                 helperText={
                   errors && errors.firstName
                     ? errors.firstName[0]
-                    : "Press Enter to change your first name"
+                    : "Pressione Enter para alterar seu primeiro nome"
                 }
-                label="First name"
+                label="Primeiro nome"
                 placeholder={hasFirstName && userData.firstName}
                 required
                 type="text"
@@ -1259,17 +1263,17 @@ class AccountTab extends Component {
             {showingField !== "first-name" && (
               <>
                 <ListItemText
-                  primary="First name"
+                  primary="Primeiro nome"
                   secondary={
                     hasFirstName
                       ? userData.firstName
-                      : "You don’t have a first name"
+                      : "Você não tem um primeiro nome"
                   }
                 />
 
                 <ListItemSecondaryAction>
                   {hasFirstName && (
-                    <Tooltip title="Change">
+                    <Tooltip title="Alterar">
                       <div>
                         <IconButton
                           disabled={performingAction}
@@ -1288,7 +1292,7 @@ class AccountTab extends Component {
                       variant="contained"
                       onClick={() => this.showField("first-name")}
                     >
-                      Add
+                      Adicionar
                     </Button>
                   )}
                 </ListItemSecondaryAction>
@@ -1305,7 +1309,7 @@ class AccountTab extends Component {
 
             {!hasLastName && (
               <ListItemIcon>
-                <Tooltip title="No last name">
+                <Tooltip title="Sem sobrenome">
                   <WarningIcon color="error" />
                 </Tooltip>
               </ListItemIcon>
@@ -1321,7 +1325,7 @@ class AccountTab extends Component {
                 helperText={
                   errors && errors.lastName
                     ? errors.lastName[0]
-                    : "Press Enter to change your last name"
+                    : "Pressione Enter para alterar seu sobrenome"
                 }
                 label="Last name"
                 placeholder={hasLastName && userData.lastName}
@@ -1339,17 +1343,17 @@ class AccountTab extends Component {
             {showingField !== "last-name" && (
               <>
                 <ListItemText
-                  primary="Last name"
+                  primary="Último nome"
                   secondary={
                     hasLastName
                       ? userData.lastName
-                      : "You don’t have a last name"
+                      : "Você não tem um sobrenome"
                   }
                 />
 
                 <ListItemSecondaryAction>
                   {hasLastName && (
-                    <Tooltip title="Change">
+                    <Tooltip title="Alterar">
                       <div>
                         <IconButton
                           disabled={performingAction}
@@ -1368,7 +1372,7 @@ class AccountTab extends Component {
                       variant="contained"
                       onClick={() => this.showField("last-name")}
                     >
-                      Add
+                      Adicionar
                     </Button>
                   )}
                 </ListItemSecondaryAction>
@@ -1385,7 +1389,7 @@ class AccountTab extends Component {
 
             {!hasUsername && (
               <ListItemIcon>
-                <Tooltip title="No username">
+                <Tooltip title="Nenhum nome de usuário">
                   <WarningIcon color="error" />
                 </Tooltip>
               </ListItemIcon>
@@ -1401,9 +1405,9 @@ class AccountTab extends Component {
                 helperText={
                   errors && errors.username
                     ? errors.username[0]
-                    : "Press Enter to change your username"
+                    : "Pressione Enter para alterar seu nome de usuário"
                 }
-                label="Username"
+                label="Nome de Usuário"
                 placeholder={hasUsername && userData.username}
                 required
                 type="text"
@@ -1419,17 +1423,17 @@ class AccountTab extends Component {
             {showingField !== "username" && (
               <>
                 <ListItemText
-                  primary="Username"
+                  primary="Nome de Usuário"
                   secondary={
                     hasUsername
                       ? userData.username
-                      : "You don’t have a username"
+                      : "Você não tem um nome de usuário"
                   }
                 />
 
                 <ListItemSecondaryAction>
                   {hasUsername && (
-                    <Tooltip title="Change">
+                    <Tooltip title="Alterar">
                       <div>
                         <IconButton
                           disabled={performingAction}
@@ -1448,7 +1452,7 @@ class AccountTab extends Component {
                       variant="contained"
                       onClick={() => this.showField("username")}
                     >
-                      Add
+                      Adicionar
                     </Button>
                   )}
                 </ListItemSecondaryAction>
@@ -1467,13 +1471,13 @@ class AccountTab extends Component {
               <ListItemIcon>
                 <>
                   {user.emailVerified && (
-                    <Tooltip title="Verified">
+                    <Tooltip title="Validado">
                       <CheckIcon color="primary" />
                     </Tooltip>
                   )}
 
                   {!user.emailVerified && (
-                    <Tooltip title="Not verified">
+                    <Tooltip title="Não confirmado">
                       <WarningIcon color="error" />
                     </Tooltip>
                   )}
@@ -1483,7 +1487,7 @@ class AccountTab extends Component {
 
             {!user.email && (
               <ListItemIcon>
-                <Tooltip title="No e-mail address">
+                <Tooltip title="Nenhum endereço de e-mail">
                   <WarningIcon color="error" />
                 </Tooltip>
               </ListItemIcon>
@@ -1499,7 +1503,7 @@ class AccountTab extends Component {
                 helperText={
                   errors && errors.emailAddress
                     ? errors.emailAddress[0]
-                    : "Press Enter to change your e-mail address"
+                    : "Pressione Enter para alterar seu endereço de e-mail"
                 }
                 label="E-mail address"
                 placeholder={user.email}
@@ -1545,7 +1549,7 @@ class AccountTab extends Component {
 
                 <ListItemSecondaryAction>
                   {user.email && (
-                    <Tooltip title="Change">
+                    <Tooltip title="Alterar">
                       <div>
                         <IconButton
                           disabled={performingAction}
@@ -1564,7 +1568,7 @@ class AccountTab extends Component {
                       variant="contained"
                       onClick={() => this.showField("email-address")}
                     >
-                      Add
+                      Adicionar
                     </Button>
                   )}
                 </ListItemSecondaryAction>
@@ -1581,14 +1585,14 @@ class AccountTab extends Component {
 
             <Hidden xsDown>
               <ListItemText
-                primary="Signed in"
+                primary="Registrado em"
                 secondary={moment(user.metadata.lastSignInTime).format("LLLL")}
               />
             </Hidden>
 
             <Hidden smUp>
               <ListItemText
-                primary="Signed in"
+                primary="Registrado em"
                 secondary={moment(user.metadata.lastSignInTime).format("llll")}
               />
             </Hidden>
@@ -1606,8 +1610,8 @@ class AccountTab extends Component {
             </Hidden>
 
             <ListItemText
-              primary="Delete account"
-              secondary="Accounts can’t be recovered"
+              primary="Deletar conta"
+              secondary="Após ser deletada a conta não podem ser recuperada"
             />
 
             <ListItemSecondaryAction>
@@ -1617,7 +1621,7 @@ class AccountTab extends Component {
                 variant="contained"
                 onClick={onDeleteAccountClick}
               >
-                Delete
+                Deletar
               </Button>
             </ListItemSecondaryAction>
           </ListItem>

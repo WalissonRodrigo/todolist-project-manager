@@ -6,7 +6,6 @@ import { Card, CardHeader } from "@material-ui/core";
 
 function UserCard(props) {
   const user = props.user;
-
   return (
     <Card>
       <CardHeader
