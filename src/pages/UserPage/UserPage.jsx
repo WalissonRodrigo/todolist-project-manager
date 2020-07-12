@@ -41,9 +41,9 @@ function UserPage() {
           setLoading(false);
           setUser(snapshot.data());
         },
-        (error) => {
+        (errors) => {
           setLoading(false);
-          setError(error);
+          setError(errors);
         }
       );
   }, [userId]);

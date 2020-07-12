@@ -58,15 +58,15 @@ authentication.signUp = (fields) => {
             lastName: lastName,
             username: username,
           })
-          .then((value) => {
+          .then((updatedValue) => {
             analytics.logEvent("sign_up", {
               method: "password",
             });
 
-            resolve(value);
+            resolve(updatedValue);
           })
-          .catch((reason) => {
-            reject(reason);
+          .catch((updatedReason) => {
+            reject(updatedReason);
           });
       })
       .catch((reason) => {
@@ -116,15 +116,15 @@ authentication.signUpWithEmailAddressAndPassword = (emailAddress, password) => {
 
         userDocumentReference
           .set({}, { merge: true })
-          .then((value) => {
+          .then((updatedValue) => {
             analytics.logEvent("sign_up", {
               method: "password",
             });
 
-            resolve(value);
+            resolve(updatedValue);
           })
-          .catch((reason) => {
-            reject(reason);
+          .catch((updatedReason) => {
+            reject(updatedReason);
           });
       })
       .catch((reason) => {
@@ -174,8 +174,8 @@ authentication.signIn = (emailAddress, password) => {
 
         userDocumentReference
           .get({ source: "server" })
-          .then((value) => {
-            if (value.exists) {
+          .then((userValue) => {
+            if (userValue.exists) {
               analytics.logEvent("login", {
                 method: "password",
               });
@@ -184,7 +184,7 @@ authentication.signIn = (emailAddress, password) => {
             } else {
               userDocumentReference
                 .set({}, { merge: true })
-                .then((value) => {
+                .then((userNotHasValue) => {
                   analytics.logEvent("login", {
                     method: "password",
                   });
@@ -296,8 +296,8 @@ authentication.signInWithAuthProvider = (provider) => {
 
     auth
       .signInWithPopup(authProvider)
-      .then((value) => {
-        const user = value.user;
+      .then((res) => {
+        const user = res.user;
 
         if (!user) {
           reject();
@@ -317,8 +317,8 @@ authentication.signInWithAuthProvider = (provider) => {
 
         userDocumentReference
           .get({ source: "server" })
-          .then((value) => {
-            if (value.exists) {
+          .then((user) => {
+            if (user.exists) {
               analytics.logEvent("login", {
                 method: provider.id,
               });
@@ -327,7 +327,7 @@ authentication.signInWithAuthProvider = (provider) => {
             } else {
               userDocumentReference
                 .set({}, { merge: true })
-                .then((value) => {
+                .then((user) => {
                   analytics.logEvent("login", {
                     method: provider.id,
                   });
@@ -545,15 +545,15 @@ authentication.changeAvatar = (avatar) => {
       .then((uploadTaskSnapshot) => {
         avatarReference
           .getDownloadURL()
-          .then((value) => {
+          .then((url) => {
             currentUser
               .updateProfile({
-                photoURL: value,
+                photoURL: url,
               })
-              .then((value) => {
+              .then((user) => {
                 analytics.logEvent("change_avatar");
 
-                resolve(value);
+                resolve(user);
               })
               .catch((reason) => {
                 reject(reason);
@@ -591,7 +591,7 @@ authentication.removeAvatar = () => {
       .updateProfile({
         photoURL: null,
       })
-      .then((value) => {
+      .then(() => {
         const avatarReference = storage
           .ref()
           .child("images")
@@ -801,7 +801,7 @@ authentication.changePassword = (password) => {
 
     currentUser
       .updatePassword(password)
-      .then((value) => {
+      .then(() => {
         const userDocumentReference = firestore.collection("users").doc(uid);
 
         userDocumentReference
