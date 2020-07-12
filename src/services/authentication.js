@@ -317,8 +317,8 @@ authentication.signInWithAuthProvider = (provider) => {
 
         userDocumentReference
           .get({ source: "server" })
-          .then((user) => {
-            if (user.exists) {
+          .then((userFirestore) => {
+            if (userFirestore.exists) {
               analytics.logEvent("login", {
                 method: provider.id,
               });
@@ -327,7 +327,7 @@ authentication.signInWithAuthProvider = (provider) => {
             } else {
               userDocumentReference
                 .set({}, { merge: true })
-                .then((user) => {
+                .then(() => {
                   analytics.logEvent("login", {
                     method: provider.id,
                   });

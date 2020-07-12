@@ -66,7 +66,7 @@ function EmptyState(props) {
           </Box>
         )}
 
-        {props.button && props.button}
+        {props.button}
       </Box>
     );
   }
@@ -97,7 +97,7 @@ function EmptyState(props) {
           </Box>
         )}
 
-        {props.button && props.button}
+        {props.button}
       </Box>
     );
   }
