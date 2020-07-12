@@ -60,10 +60,8 @@ const initialState = {
 class SignUpDialog extends Component {
   constructor(props) {
     super(props);
-
     this.state = initialState;
   }
-
   signUp = () => {
     const {
       emailAddress,
@@ -104,21 +102,7 @@ class SignUpDialog extends Component {
               this.props.dialogProps.onClose();
             })
             .catch((reason) => {
-              const code = reason.code;
-              const message = reason.message;
-
-              switch (code) {
-                case "auth/email-already-in-use":
-                case "auth/invalid-email":
-                case "auth/operation-not-allowed":
-                case "auth/weak-password":
-                  this.props.openSnackbar(message);
-                  return;
-
-                default:
-                  this.props.openSnackbar(message);
-                  return;
-              }
+              this.props.openSnackbar(authentication.getErrorFirebase(reason));
             })
             .finally(() => {
               this.setState({
@@ -149,51 +133,7 @@ class SignUpDialog extends Component {
             });
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              case "auth/invalid-credential":
-                this.props.openSnackbar(
-                  "Esta operação é sensível e requer autenticação recente. Efetue login novamente antes de tentar novamente esta solicitação."
-                );
-                return;
-              case "auth/user-not-found":
-                this.props.openSnackbar(
-                  "Não há registro de usuário existente correspondente ao identificador fornecido."
-                );
-                return;
-              case "auth/account-exists-with-different-credential":
-                this.props.openSnackbar(
-                  "Essa conta já existe com credenciais diferentes."
-                );
-                return;
-              case "auth/operation-not-allowed":
-                this.props.openSnackbar(
-                  "O método de login usado não está habilitado para este projeto."
-                );
-                return;
-              case "auth/popup-blocked":
-                this.props.openSnackbar(
-                  "Pop-up do navegador bloqueado. Após liberar os pop-ups tente novamente."
-                );
-                return;
-              case "auth/popup-closed-by-user":
-                this.props.openSnackbar(
-                  "O pop-up foi fechado pelo usuário antes de finalizar a operação."
-                );
-                return;
-              case "auth/auth-domain-config-required":
-              case "auth/cancelled-popup-request":
-              case "auth/operation-not-supported-in-this-environment":
-              case "auth/unauthorized-domain":
-                this.props.openSnackbar(message);
-                return;
-
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -297,7 +237,7 @@ class SignUpDialog extends Component {
         <DialogTitle disableTypography>
           <Typography variant="h6">Crie sua conta agora mesmo</Typography>
 
-          <Tooltip title="Close">
+          <Tooltip title="Fechar">
             <IconButton
               className={classes.closeButton}
               disabled={performingAction}

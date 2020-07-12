@@ -15,8 +15,8 @@ import EmptyState from "../../components/EmptyState";
 import Loader from "../../components/Loader";
 import UserCard from "../../components/UserCard";
 
-import { ReactComponent as ErrorIllustration } from "../../illustrations/error.svg";
-import { ReactComponent as NoDataIllustration } from "../../illustrations/no-data.svg";
+import { ReactComponent as ErrorIllustration } from "../../assets/illustrations/error.svg";
+import { ReactComponent as NoDataIllustration } from "../../assets/illustrations/no-data.svg";
 
 const useStyles = makeStyles({
   grid: {

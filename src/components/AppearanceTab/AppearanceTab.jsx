@@ -76,14 +76,7 @@ class AppearanceTab extends Component {
             dark: theme.dark,
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(appearance.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -127,14 +120,7 @@ class AppearanceTab extends Component {
             dark: theme.dark,
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(appearance.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -174,14 +160,7 @@ class AppearanceTab extends Component {
             dark: dark,
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(appearance.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -211,14 +190,7 @@ class AppearanceTab extends Component {
         appearance
           .resetTheme()
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(appearance.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({

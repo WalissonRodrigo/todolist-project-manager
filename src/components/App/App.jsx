@@ -164,14 +164,7 @@ class App extends Component {
             });
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.openSnackbar(message);
-                return;
-            }
+            this.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -192,18 +185,11 @@ class App extends Component {
           .signOut()
           .then(() => {
             this.closeAllDialogs(() => {
-              this.openSnackbar("Signed out");
+              this.openSnackbar("Desconectado");
             });
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.openSnackbar(message);
-                return;
-            }
+            this.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -454,41 +440,20 @@ class App extends Component {
                 })
                 .catch((reason) => {
                   this.resetState(() => {
-                    const code = reason.code;
-                    const message = reason.message;
-
-                    switch (code) {
-                      default:
-                        this.openSnackbar(message);
-                        return;
-                    }
+                    this.openSnackbar(authentication.getErrorFirebase(reason));
                   });
                 });
             },
             (error) => {
               this.resetState(() => {
-                const code = error.code;
-                const message = error.message;
-
-                switch (code) {
-                  default:
-                    this.openSnackbar(message);
-                    return;
-                }
+                this.openSnackbar(authentication.getErrorFirebase(error));
               });
             }
           );
       },
       (error) => {
         this.resetState(() => {
-          const code = error.code;
-          const message = error.message;
-
-          switch (code) {
-            default:
-              this.openSnackbar(message);
-              return;
-          }
+          this.openSnackbar(authentication.getErrorFirebase(error));
         });
       }
     );

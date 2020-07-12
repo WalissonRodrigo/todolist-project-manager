@@ -164,14 +164,7 @@ class AccountTab extends Component {
             });
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -214,7 +207,7 @@ class AccountTab extends Component {
           authentication
             .removeAvatar()
             .then((value) => {
-              const { user, userData } = this.props;
+              const { userData } = this.props;
 
               this.setState({
                 profileCompletion: authentication.getProfileCompletion({
@@ -224,14 +217,7 @@ class AccountTab extends Component {
               });
             })
             .catch((reason) => {
-              const code = reason.code;
-              const message = reason.message;
-
-              switch (code) {
-                default:
-                  this.props.openSnackbar(message);
-                  return;
-              }
+              this.props.openSnackbar(authentication.getErrorFirebase(reason));
             })
             .finally(() => {
               this.setState({
@@ -311,13 +297,11 @@ class AccountTab extends Component {
             authentication
               .changeFirstName(firstName)
               .then(() => {
-                const { user, userData } = this.props;
-
                 this.setState(
                   {
                     profileCompletion: authentication.getProfileCompletion({
-                      ...user,
-                      ...userData,
+                      ...this.user,
+                      ...this.userData,
                     }),
                   },
                   () => {
@@ -326,14 +310,9 @@ class AccountTab extends Component {
                 );
               })
               .catch((reason) => {
-                const code = reason.code;
-                const message = reason.message;
-
-                switch (code) {
-                  default:
-                    this.props.openSnackbar(message);
-                    return;
-                }
+                this.props.openSnackbar(
+                  authentication.getErrorFirebase(reason)
+                );
               })
               .finally(() => {
                 this.setState({
@@ -385,13 +364,11 @@ class AccountTab extends Component {
             authentication
               .changeLastName(lastName)
               .then(() => {
-                const { user, userData } = this.props;
-
                 this.setState(
                   {
                     profileCompletion: authentication.getProfileCompletion({
-                      ...user,
-                      ...userData,
+                      ...this.user,
+                      ...this.userData,
                     }),
                   },
                   () => {
@@ -400,14 +377,9 @@ class AccountTab extends Component {
                 );
               })
               .catch((reason) => {
-                const code = reason.code;
-                const message = reason.message;
-
-                switch (code) {
-                  default:
-                    this.props.openSnackbar(message);
-                    return;
-                }
+                this.props.openSnackbar(
+                  authentication.getErrorFirebase(reason)
+                );
               })
               .finally(() => {
                 this.setState({
@@ -459,7 +431,7 @@ class AccountTab extends Component {
             authentication
               .changeUsername(username)
               .then(() => {
-                const { user, userData } = this.props;
+                const { user } = this.props;
 
                 this.setState(
                   {
@@ -474,14 +446,9 @@ class AccountTab extends Component {
                 );
               })
               .catch((reason) => {
-                const code = reason.code;
-                const message = reason.message;
-
-                switch (code) {
-                  default:
-                    this.props.openSnackbar(message);
-                    return;
-                }
+                this.props.openSnackbar(
+                  authentication.getErrorFirebase(reason)
+                );
               })
               .finally(() => {
                 this.setState({
@@ -533,7 +500,7 @@ class AccountTab extends Component {
             authentication
               .changeEmailAddress(emailAddress)
               .then(() => {
-                const { user, userData } = this.props;
+                const { userData } = this.props;
 
                 this.setState(
                   {
@@ -548,14 +515,9 @@ class AccountTab extends Component {
                 );
               })
               .catch((reason) => {
-                const code = reason.code;
-                const message = reason.message;
-
-                switch (code) {
-                  default:
-                    this.props.openSnackbar(message);
-                    return;
-                }
+                this.props.openSnackbar(
+                  authentication.getErrorFirebase(reason)
+                );
               })
               .finally(() => {
                 this.setState({
@@ -582,19 +544,12 @@ class AccountTab extends Component {
                 sentVerificationEmail: true,
               },
               () => {
-                this.props.openSnackbar("Sent verification e-mail");
+                this.props.openSnackbar("Email de verificação enviado.");
               }
             );
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({

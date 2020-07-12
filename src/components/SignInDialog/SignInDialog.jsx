@@ -121,28 +121,11 @@ class SignInDialog extends Component {
                 .resetPassword(emailAddress)
                 .then((value) => {
                   this.props.openSnackbar(
-                    `Sent password reset e-mail to ${emailAddress}`
+                    `Link para redefinir a Senha enviada ao email ${emailAddress}`
                   );
                 })
                 .catch((reason) => {
-                  const code = reason.code;
-                  const message = reason.message;
-
-                  switch (code) {
-                    case "auth/invalid-email":
-                    case "auth/missing-android-pkg-name":
-                    case "auth/missing-continue-uri":
-                    case "auth/missing-ios-bundle-id":
-                    case "auth/invalid-continue-uri":
-                    case "auth/unauthorized-continue-uri":
-                    case "auth/user-not-found":
-                      this.props.openSnackbar(message);
-                      return;
-
-                    default:
-                      this.props.openSnackbar(message);
-                      return;
-                  }
+                  this.openSnackbar(authentication.getErrorFirebase(reason));
                 })
                 .finally(() => {
                   this.setState({
@@ -194,21 +177,7 @@ class SignInDialog extends Component {
               });
             })
             .catch((reason) => {
-              const code = reason.code;
-              const message = reason.message;
-
-              switch (code) {
-                case "auth/invalid-email":
-                case "auth/user-disabled":
-                case "auth/user-not-found":
-                case "auth/wrong-password":
-                  this.props.openSnackbar(message);
-                  return;
-
-                default:
-                  this.props.openSnackbar(message);
-                  return;
-              }
+              this.openSnackbar(authentication.getErrorFirebase(reason));
             })
             .finally(() => {
               this.setState({
@@ -250,28 +219,13 @@ class SignInDialog extends Component {
           .sendSignInLinkToEmail(emailAddress)
           .then(() => {
             this.props.dialogProps.onClose(() => {
-              this.props.openSnackbar(`Sent sign-in e-mail to ${emailAddress}`);
+              this.props.openSnackbar(
+                `Email para entrar enviado. Confira em ${emailAddress}`
+              );
             });
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              case "auth/argument-error":
-              case "auth/invalid-email":
-              case "auth/missing-android-pkg-name":
-              case "auth/missing-continue-uri":
-              case "auth/missing-ios-bundle-id":
-              case "auth/invalid-continue-uri":
-              case "auth/unauthorized-continue-uri":
-                this.props.openSnackbar(message);
-                return;
-
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -296,56 +250,12 @@ class SignInDialog extends Component {
               const emailAddress = user.email;
 
               this.props.openSnackbar(
-                `Signed in as ${displayName || emailAddress}`
+                `Registrado como ${displayName || emailAddress}`
               );
             });
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              case "auth/invalid-credential":
-                this.props.openSnackbar(
-                  "Esta operação é sensível e requer autenticação recente. Efetue login novamente antes de tentar novamente esta solicitação."
-                );
-                return;
-              case "auth/user-not-found":
-                this.props.openSnackbar(
-                  "Não há registro de usuário existente correspondente ao identificador fornecido."
-                );
-                return;
-              case "auth/account-exists-with-different-credential":
-                this.props.openSnackbar(
-                  "Essa conta já existe com credenciais diferentes."
-                );
-                return;
-              case "auth/operation-not-allowed":
-                this.props.openSnackbar(
-                  "O método de login usado não está habilitado para este projeto."
-                );
-                return;
-              case "auth/popup-blocked":
-                this.props.openSnackbar(
-                  "Pop-up do navegador bloqueado. Após liberar os pop-ups tente novamente."
-                );
-                return;
-              case "auth/popup-closed-by-user":
-                this.props.openSnackbar(
-                  "O pop-up foi fechado pelo usuário antes de finalizar a operação."
-                );
-                return;
-              case "auth/auth-domain-config-required":
-              case "auth/cancelled-popup-request":
-              case "auth/operation-not-supported-in-this-environment":
-              case "auth/unauthorized-domain":
-                this.props.openSnackbar(message);
-                return;
-
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -420,7 +330,7 @@ class SignInDialog extends Component {
         <DialogTitle disableTypography>
           <Typography variant="h6">Faça login em sua conta</Typography>
 
-          <Tooltip title="Close">
+          <Tooltip title="Fechar">
             <IconButton
               className={classes.closeButton}
               disabled={performingAction}

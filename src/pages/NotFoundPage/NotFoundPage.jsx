@@ -8,7 +8,7 @@ import { Home as HomeIcon } from "@material-ui/icons";
 
 import EmptyState from "../../components/EmptyState";
 
-import { ReactComponent as NotFoundIllustration } from "../../illustrations/not-found.svg";
+import { ReactComponent as NotFoundIllustration } from "../../assets/illustrations/not-found.svg";
 
 class NotFoundPage extends Component {
   render() {

@@ -1,4 +1,5 @@
 import firebase, { analytics, auth, firestore, storage } from "../firebase";
+import errors from "./errors";
 
 import moment from "moment";
 
@@ -73,7 +74,11 @@ authentication.signUp = (fields) => {
       });
   });
 };
-
+/**
+ * Create Account using Email and Password only without social integration
+ * @param {*} emailAddress
+ * @param {*} password
+ */
 authentication.signUpWithEmailAddressAndPassword = (emailAddress, password) => {
   return new Promise((resolve, reject) => {
     if (!emailAddress || !password) {
@@ -127,7 +132,11 @@ authentication.signUpWithEmailAddressAndPassword = (emailAddress, password) => {
       });
   });
 };
-
+/**
+ * Login for accounts created using email and password only
+ * @param {*} emailAddress
+ * @param {*} password
+ */
 authentication.signIn = (emailAddress, password) => {
   return new Promise((resolve, reject) => {
     if (!emailAddress || !password) {
@@ -1056,4 +1065,5 @@ authentication.getSecurityRating = (user, userData) => {
   return securityRating;
 };
 
+authentication.getErrorFirebase = errors.getErrorFirebase;
 export default authentication;

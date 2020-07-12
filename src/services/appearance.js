@@ -3,6 +3,7 @@ import camelCase from "camelcase";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 import firebase, { analytics, auth, firestore } from "../firebase";
+import errors from "./errors";
 
 import {
   red,
@@ -507,5 +508,5 @@ appearance.resetTheme = () => {
       });
   });
 };
-
+appearance.getErrorFirebase = errors.getErrorFirebase;
 export default appearance;

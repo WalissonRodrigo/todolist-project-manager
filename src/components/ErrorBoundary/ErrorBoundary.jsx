@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/browser";
 
 import EmptyState from "../EmptyState";
 
-import { ReactComponent as ErrorIllustration } from "../../illustrations/error.svg";
+import { ReactComponent as ErrorIllustration } from "../../assets/illustrations/error.svg";
 
 class ErrorBoundary extends Component {
   constructor(props) {

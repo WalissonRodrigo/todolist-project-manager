@@ -68,7 +68,11 @@ class LinksTab extends Component {
         authentication
           .unlinkAuthProvider(authProvider.id)
           .then((value) => {
-            this.props.openSnackbar(`${authProvider.name} unlinked`, 4);
+            this.props.openSnackbar(
+              `${authProvider.name} desvinculada`,
+              null,
+              4
+            );
           })
           .catch((reason) => {
             const code = reason.code;
