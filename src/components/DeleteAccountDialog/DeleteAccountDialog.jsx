@@ -83,20 +83,20 @@ class DeleteAccountDialog extends Component {
         onKeyPress={this.handleKeyPress}
         onExited={this.handleExited}
       >
-        <DialogTitle>Delete account?</DialogTitle>
+        <DialogTitle>Deletar conta?</DialogTitle>
 
         <DialogContent>
           <Box mb={hasUsername ? 2 : 0}>
             <DialogContentText>
-              Deleted accounts can’t be recovered. All data associated with your
-              account will be deleted.
+              Contas excluídas não podem ser recuperadas. Todos os dados
+              associados à sua conta serão excluídos.
             </DialogContentText>
 
             {hasUsername && (
               <DialogContentText>
-                Type your username and <Hidden xsDown>click</Hidden>
-                <Hidden smUp>tap</Hidden> Delete to delete your account. This
-                action is irreversible.
+                Digite seu nome de usuário e <Hidden xsDown> clique em </Hidden>{" "}
+                <Hidden smUp> toque em </Hidden> Excluir para excluir sua conta.
+                Essa ação é irreversível.
               </DialogContentText>
             )}
           </Box>
@@ -108,7 +108,7 @@ class DeleteAccountDialog extends Component {
               color="secondary"
               disabled={performingAction}
               fullWidth
-              label="Username"
+              label="Nome do Usuário"
               placeholder={userData.username}
               required
               type="text"
@@ -125,7 +125,7 @@ class DeleteAccountDialog extends Component {
             disabled={performingAction}
             onClick={dialogProps.onClose}
           >
-            Cancel
+            Cancelar
           </Button>
           <Button
             color="secondary"
@@ -136,7 +136,7 @@ class DeleteAccountDialog extends Component {
             variant="contained"
             onClick={deleteAccount}
           >
-            Delete
+            Deletar
           </Button>
         </DialogActions>
       </Dialog>
