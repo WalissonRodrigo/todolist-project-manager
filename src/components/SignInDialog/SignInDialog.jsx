@@ -85,7 +85,7 @@ class SignInDialog extends Component {
         variant="contained"
         onClick={() => this.signIn()}
       >
-        Cadastre-se
+        Entrar
       </Button>
     );
   };
