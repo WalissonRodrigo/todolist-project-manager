@@ -39,13 +39,9 @@ class HomePage extends Component {
       authentication
         .signInWithEmailLink(emailAddress, emailLink)
         .then((value) => {
-          const user = value.user;
-          const displayName = user.displayName;
-          const emailAddress = user.email;
+          const { displayName, email } = value.user;
 
-          this.props.openSnackbar(
-            `Autenticado como ${displayName || emailAddress}`
-          );
+          this.props.openSnackbar(`Autenticado como ${displayName || email}`);
         })
         .catch((reason) => {
           this.props.openSnackbar(authentication.getErrorFirebase(reason));

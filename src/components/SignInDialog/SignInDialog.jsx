@@ -69,7 +69,7 @@ class SignInDialog extends Component {
       return (
         <Button
           color="primary"
-          disabled={!emailAddress || performingAction}
+          disabled={performingAction}
           variant="contained"
           onClick={() => this.sendSignInLinkToEmail()}
         >
@@ -168,11 +168,8 @@ class SignInDialog extends Component {
             .signIn(emailAddress, password)
             .then((user) => {
               this.props.dialogProps.onClose(() => {
-                const displayName = user.displayName;
-                const emailAddress = user.email;
-
                 this.props.openSnackbar(
-                  `Você entrou como ${displayName || emailAddress}`
+                  `Você entrou como ${user.displayName || user.email}`
                 );
               });
             })
