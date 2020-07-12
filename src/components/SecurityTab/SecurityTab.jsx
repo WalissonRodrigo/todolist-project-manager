@@ -145,14 +145,9 @@ class SecurityTab extends Component {
                 });
               })
               .catch((reason) => {
-                const code = reason.code;
-                const message = reason.message;
-
-                switch (code) {
-                  default:
-                    this.props.openSnackbar(message);
-                    return;
-                }
+                this.props.openSnackbar(
+                  authentication.getErrorFirebase(reason)
+                );
               })
               .finally(() => {
                 this.setState({

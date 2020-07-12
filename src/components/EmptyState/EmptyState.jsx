@@ -28,8 +28,8 @@ function EmptyState(props) {
       break;
 
     default:
-      imageWidth = 60;
-      imageHeight = 60;
+      imageWidth = 70;
+      imageHeight = 70;
       variant = "h5";
       break;
   }

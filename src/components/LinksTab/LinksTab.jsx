@@ -41,14 +41,7 @@ class LinksTab extends Component {
             this.props.openSnackbar(`${authProvider.name} linked`, 5);
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -75,14 +68,7 @@ class LinksTab extends Component {
             );
           })
           .catch((reason) => {
-            const code = reason.code;
-            const message = reason.message;
-
-            switch (code) {
-              default:
-                this.props.openSnackbar(message);
-                return;
-            }
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
