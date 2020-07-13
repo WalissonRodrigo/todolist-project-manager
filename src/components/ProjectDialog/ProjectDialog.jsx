@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -9,6 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { TextField, Container } from "@material-ui/core";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -60,12 +62,7 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function ProjectDialog({
-  open,
-  project,
-  handleClose,
-  handleSave,
-}) {
+const ProjectDialog = ({ open, project, handleClose, handleSave }) => {
   const classes = useStyles();
   const [projectNewEdit, setProjectNewEdit] = useState(project);
   useEffect(() => {
@@ -148,4 +145,25 @@ export default function ProjectDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
+ProjectDialog.defaultProps = {
+  open: false,
+  project: {
+    title: "",
+    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+  },
+  handleClose: function () {},
+  handleSave: function () {},
+};
+
+ProjectDialog.propTypes = {
+  // Properties
+  open: PropTypes.bool.isRequired,
+  project: PropTypes.object.isRequired,
+
+  // Events
+  handleClose: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
+};
+export default ProjectDialog;

@@ -271,8 +271,8 @@ todolist.getAll = () => {
           }
         );
       },
-      (errors) => {
-        reject(errors);
+      (error) => {
+        reject(error);
       }
     );
   });

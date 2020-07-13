@@ -232,7 +232,7 @@ const ToDoListCard = ({ user }) => {
                 <List dense={true}>
                   {todoList.tasks
                     ? todoList.tasks
-                        .filter((task) => task.projectId === proj.id)
+                        .filter((tasks) => tasks.projectId === proj.id)
                         .map((task) => (
                           <TaskItem
                             key={task.id}

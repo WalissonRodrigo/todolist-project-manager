@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import {
   ListItem,
   ListItemText,
@@ -127,4 +128,27 @@ const TaskItem = ({ task, handleDeleteTask, handleEditTask }) => {
   );
 };
 
+TaskItem.defaultProps = {
+  task: {
+    title: "",
+    comment: "",
+    owner: "",
+    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    priority: 1,
+    progress: 0,
+    conclusion: false,
+  },
+  handleEditTask: function () {},
+  handleDeleteTask: function () {},
+};
+
+TaskItem.propTypes = {
+  // Properties
+  task: PropTypes.object.isRequired,
+
+  // Events
+  handleDeleteTask: PropTypes.func.isRequired,
+  handleEditTask: PropTypes.func.isRequired,
+};
 export default TaskItem;

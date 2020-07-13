@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   formInLine: {
     display: "flex",
     flexDirection: "row",
+    alignContent: "center",
   },
 }));
 
@@ -73,13 +75,7 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function TaskDialog({
-  open,
-  task,
-  projectId,
-  handleClose,
-  handleSave,
-}) {
+const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
   const classes = useStyles();
   const [taskNewEdit, setTaskNewEdit] = useState(task);
   const [projectIdLocal, setProjectIdLocal] = useState(projectId);
@@ -237,4 +233,34 @@ export default function TaskDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+TaskDialog.defaultProps = {
+  open: false,
+  task: {
+    title: "",
+    comment: "",
+    owner: "",
+    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    priority: 1,
+    progress: 0,
+    conclusion: false,
+  },
+  projectId: 0,
+  handleClose: function () {},
+  handleSave: function () {},
+};
+
+TaskDialog.propTypes = {
+  // Properties
+  open: PropTypes.bool.isRequired,
+  task: PropTypes.object.isRequired,
+  projectId: PropTypes.number.isRequired,
+
+  // Events
+  handleClose: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
+};
+
+export default TaskDialog;
