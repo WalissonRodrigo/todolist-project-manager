@@ -65,9 +65,10 @@ class Bar extends Component {
 
     const menuItems = [
       {
-        name: "Sobre",
-        onClick: onAboutClick,
+        name: "Projetos",
+        to: "/",
       },
+
       {
         name: "Perfil",
         to: user ? `/user/${user.uid}` : null,
@@ -75,6 +76,10 @@ class Bar extends Component {
       {
         name: "Configurações",
         onClick: onSettingsClick,
+      },
+      {
+        name: "Sobre",
+        onClick: onAboutClick,
       },
       {
         name: "Sair",
@@ -87,7 +92,13 @@ class Bar extends Component {
       <AppBar color="primary" position="static">
         <Toolbar>
           <Box display="flex" flexGrow={1}>
-            <Typography color="inherit" variant="h6">
+            <Typography
+              color="inherit"
+              variant="h6"
+              component={Link}
+              to="/"
+              style={{ textDecoration: "none" }}
+            >
               {process.env.REACT_APP_TITLE}
             </Typography>
           </Box>
