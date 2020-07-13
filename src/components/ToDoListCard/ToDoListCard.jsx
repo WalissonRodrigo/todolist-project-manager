@@ -92,9 +92,9 @@ const ToDoListCard = ({ user }) => {
     setDialogProject(false);
   };
 
-  const handleOpenDialogTask = (task, projectId) => {
-    setProjectId(projectId);
-    setTask(task);
+  const handleOpenDialogTask = (currentTask, currentProjectId) => {
+    setProjectId(currentProjectId);
+    setTask(currentTask);
     setDialogTask(true);
   };
 
@@ -112,28 +112,28 @@ const ToDoListCard = ({ user }) => {
     setDialogTask(false);
   };
 
-  const handleSaveProject = (project) => {
-    if (project && "id" in project) {
-      todolist.updateProject(project);
+  const handleSaveProject = (projectToStore) => {
+    if (projectToStore && "id" in projectToStore) {
+      todolist.updateProject(projectToStore);
     } else {
-      todolist.createProject(project);
+      todolist.createProject(projectToStore);
     }
   };
 
-  const handleDeleteProject = (projectId) => {
-    todolist.deleteProject(projectId);
+  const handleDeleteProject = (currentProjectId) => {
+    todolist.deleteProject(currentProjectId);
   };
 
-  const handleSaveTask = (task, projectId) => {
-    if (task.projectId && task.id) {
+  const handleSaveTask = (taskToStore, currentProjectId) => {
+    if (taskToStore.projectId && taskToStore.id) {
       todolist.updateTask(task);
-    } else if (projectId) {
+    } else if (currentProjectId) {
       todolist.createTask(task, projectId);
     }
   };
 
-  const handleDeleteTask = (taskId) => {
-    todolist.deleteTask(taskId);
+  const handleDeleteTask = (currentTaskId) => {
+    todolist.deleteTask(currentTaskId);
   };
 
   const classes = useStyles();
@@ -142,39 +142,33 @@ const ToDoListCard = ({ user }) => {
     return firestore
       .collection("projects")
       .where("userId", "==", user.uid)
-      .onSnapshot(
-        (snapshot) => {
-          let projects = [];
-          snapshot.forEach((doc) => {
-            const data = doc.data();
-            projects.push({
-              id: doc.id,
-              ...data,
+      .onSnapshot((snapshot) => {
+        let projects = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          projects.push({
+            id: doc.id,
+            ...data,
+          });
+        });
+        firestore
+          .collection("tasks")
+          .where("userId", "==", user.uid)
+          .onSnapshot((snapshotTask) => {
+            let tasks = [];
+            snapshotTask.forEach((doc) => {
+              const data = doc.data();
+              tasks.push({
+                id: doc.id,
+                ...data,
+              });
+            });
+            setTodoList({
+              projects: projects,
+              tasks: tasks,
             });
           });
-          firestore
-            .collection("tasks")
-            .where("userId", "==", user.uid)
-            .onSnapshot(
-              (snapshotTask) => {
-                let tasks = [];
-                snapshotTask.forEach((doc) => {
-                  const data = doc.data();
-                  tasks.push({
-                    id: doc.id,
-                    ...data,
-                  });
-                });
-                setTodoList({
-                  projects: projects,
-                  tasks: tasks,
-                });
-              },
-              (errorTasks) => {}
-            );
-        },
-        (errors) => {}
-      );
+      });
   }, [user.uid]);
 
   return (
@@ -258,6 +252,9 @@ const ToDoListCard = ({ user }) => {
 };
 ToDoListCard.defaultProps = {
   context: "standalone",
+  user: {
+    uid: "",
+  },
 };
 
 ToDoListCard.propTypes = {
