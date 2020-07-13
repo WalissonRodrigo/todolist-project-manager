@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { withStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -10,6 +10,12 @@ import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { TextField, Container } from "@material-ui/core";
 
+const useStyles = makeStyles((theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
+}));
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -60,7 +66,11 @@ export default function ProjectDialog({
   handleClose,
   handleSave,
 }) {
+  const classes = useStyles();
   const [projectNewEdit, setProjectNewEdit] = useState(project);
+  useEffect(() => {
+    setProjectNewEdit(project);
+  }, [project]);
   return (
     <Dialog
       onClose={handleClose}
@@ -68,21 +78,54 @@ export default function ProjectDialog({
       open={open}
     >
       <DialogTitle id="project-dialog-title" onClose={handleClose}>
-        {project ? "Editar Projeto" : "Criar Novo Projeto"}
+        {project && "id" in project ? "Editar Projeto" : "Criar Novo Projeto"}
       </DialogTitle>
       <DialogContent dividers>
-        <Container>
+        <Container className={classes.form}>
           <TextField
             required
-            id="filled-required"
+            id="title-project-required"
             label="Titulo"
-            defaultValue="Titulo do seu Projeto"
             value={projectNewEdit.title}
             variant="filled"
             onChange={(event) =>
               setProjectNewEdit({
                 ...projectNewEdit,
                 title: event.currentTarget.value,
+              })
+            }
+          />
+          <TextField
+            required
+            id="dateStart-required"
+            label="Data de Inicio"
+            type="datetime-local"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={projectNewEdit.dateStart}
+            variant="filled"
+            onChange={(event) =>
+              setProjectNewEdit({
+                ...projectNewEdit,
+                dateStart: event.currentTarget.value,
+              })
+            }
+          />
+          <TextField
+            required
+            id="dateEnd-required"
+            label="Data de Termino"
+            value={projectNewEdit.dateEnd}
+            type="datetime-local"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="filled"
+            onChange={(event) =>
+              setProjectNewEdit({
+                ...projectNewEdit,
+                dateEnd: event.currentTarget.value,
               })
             }
           />
@@ -94,7 +137,10 @@ export default function ProjectDialog({
         </Button>
         <Button
           autoFocus
-          onClick={() => handleSave(projectNewEdit)}
+          onClick={() => {
+            handleClose();
+            handleSave(projectNewEdit);
+          }}
           color="primary"
         >
           Salvar

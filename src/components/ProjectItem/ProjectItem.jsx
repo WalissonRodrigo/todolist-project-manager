@@ -1,18 +1,25 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
-import { List, ListItem, ListItemSecondaryAction } from "@material-ui/core";
-
+import {
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+} from "@material-ui/core";
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   listItemAction: {
     top: "50% !important",
     [theme.breakpoints.down("md")]: {
       top: "10% !important",
     },
+  },
+  listItem: {
+    fontSize: "bold",
   },
 }));
 
@@ -26,16 +33,36 @@ const ProjectItem = ({
   return (
     <List>
       <ListItem>
-        <Typography gutterBottom variant="h5" component="h3">
-          {project ? project.title + " " : " "}
-        </Typography>
+        <ListItemText
+          className={classes.listItemText}
+          primary={project.title}
+          secondary={`Data Inicio: ${moment(project.dateStart).format(
+            "DD/MM/YYYY HH:mm:ss"
+          )} Data de Conclusão: ${moment(project.dateEnd).format(
+            "DD/MM/YYYY HH:mm:ss"
+          )}`}
+        />
       </ListItem>
       <ListItemSecondaryAction className={classes.listItemAction}>
         <IconButton
           color="primary"
           edge="start"
           aria-label="add new task"
-          onClick={() => handleCreateTask(null, project.id)}
+          onClick={() =>
+            handleCreateTask(
+              {
+                title: "",
+                comment: "",
+                owner: "",
+                dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+                dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+                priority: 1,
+                progress: 0,
+                conclusion: false,
+              },
+              project.id
+            )
+          }
         >
           <AddIcon />
         </IconButton>

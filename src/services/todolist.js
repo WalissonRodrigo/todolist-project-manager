@@ -32,15 +32,14 @@ todolist.createTask = (task, projectId) => {
       progress,
       conclusion,
     } = task;
-
     const tasksDocumentReference = firestore.collection("tasks").doc();
     tasksDocumentReference
       .set({
         title: title,
         owner: owner,
         comment: comment,
-        dateStart: dateStart.format("X"),
-        dateEnd: dateEnd.format("X"),
+        dateStart: moment(dateStart).format("YYYY-MM-DD[T]HH:mm:ss"),
+        dateEnd: moment(dateEnd).format("YYYY-MM-DD[T]HH:mm:ss"),
         priority: priority,
         progress: progress,
         conclusion: conclusion,
@@ -88,15 +87,14 @@ todolist.updateTask = (task) => {
       progress,
       conclusion,
     } = task;
-
     const tasksDocumentReference = firestore.collection("tasks").doc(task.id);
     tasksDocumentReference
       .set({
         title: title,
         owner: owner,
         comment: comment,
-        dateStart: dateStart,
-        dateEnd: dateEnd,
+        dateStart: moment(dateStart).format("YYYY-MM-DD[T]HH:mm:ss"),
+        dateEnd: moment(dateEnd).format("YYYY-MM-DD[T]HH:mm:ss"),
         priority: priority,
         progress: progress,
         conclusion: conclusion,
@@ -143,8 +141,8 @@ todolist.createProject = (project) => {
     }
     const newProject = {
       title: title,
-      dateStart: dateStart,
-      dateEnd: dateEnd,
+      dateStart: moment(dateStart).format("YYYY-MM-DD[T]HH:mm:ss"),
+      dateEnd: moment(dateEnd).format("YYYY-MM-DD[T]HH:mm:ss"),
       userId: uid,
     };
     const projectsDocumentReference = firestore.collection("projects").doc();
@@ -189,8 +187,8 @@ todolist.updateProject = (project) => {
     tasksDocumentReference
       .set({
         title: title,
-        dateStart: dateStart,
-        dateEnd: dateEnd,
+        dateStart: moment(dateStart).format("YYYY-MM-DD[T]HH:mm:ss"),
+        dateEnd: moment(dateEnd).format("YYYY-MM-DD[T]HH:mm:ss"),
         userId: uid,
       })
       .then((res) => {
@@ -248,12 +246,6 @@ todolist.getAll = () => {
           const project = {
             id: doc.id,
             ...data,
-            dateStart: moment(data.dateEnd.toDate()).format(
-              "DD/MM/YYYY HH:mm:ss"
-            ),
-            dateEnd: moment(data.dateEnd.toDate()).format(
-              "DD/MM/YYYY HH:mm:ss"
-            ),
           };
           projects.push(project);
         });

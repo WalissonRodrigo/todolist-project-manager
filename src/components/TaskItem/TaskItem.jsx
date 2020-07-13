@@ -7,9 +7,11 @@ import {
   IconButton,
   ListItemIcon,
   Checkbox,
+  Grid,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -40,6 +42,7 @@ const TaskItem = ({ task, handleDeleteTask, handleEditTask }) => {
       <ListItemIcon className={classes.listItemText}>
         <Checkbox
           edge="start"
+          disabled={true}
           checked={task.conclusion}
           onChange={() => {
             task.conclusion = !task.conclusion;
@@ -51,50 +54,64 @@ const TaskItem = ({ task, handleDeleteTask, handleEditTask }) => {
           }}
         />
       </ListItemIcon>
+      <Grid item xs={12}>
+        <ListItemText
+          className={classes.listItemText}
+          primary={task.title}
+          secondary={task.comment}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <ListItemText
+          className={classes.listItemText}
+          primary="Responsável"
+          secondary={task.owner}
+        />
+      </Grid>
 
-      <ListItemText
-        className={classes.listItemText}
-        primary={task.title}
-        secondary={task.comment}
-      />
+      <Grid item xs={6}>
+        <ListItemText
+          className={classes.listItemText}
+          primary="Prioridade"
+          secondary={
+            task.priority === 1
+              ? "BAIXA"
+              : task.priority === 2
+              ? "MÉDIA"
+              : "ALTA"
+          }
+        />
+      </Grid>
 
-      <ListItemText
-        className={classes.listItemText}
-        primary="Responsável"
-        secondary={task.owner}
-      />
+      <Grid item xs={6}>
+        <ListItemText
+          className={classes.listItemText}
+          primary="Concluído"
+          secondary={`${task.progress}%`}
+        />
+      </Grid>
 
-      <ListItemText
-        className={classes.listItemText}
-        primary="Prioridade"
-        secondary={
-          task.priority === 1 ? "BAIXA" : task.priority === 2 ? "MÉDIA" : "ALTA"
-        }
-      />
+      <Grid item xs={12}>
+        <ListItemText
+          className={classes.listItemText}
+          primary="Data Inicio"
+          secondary={moment(task.dateStart).format("DD/MM/YYYY HH:mm:ss")}
+        />
+      </Grid>
 
-      <ListItemText
-        className={classes.listItemText}
-        primary="Concluído"
-        secondary={`${task.progress}%`}
-      />
-
-      <ListItemText
-        className={classes.listItemText}
-        primary="Data Inicio"
-        secondary="13/07/2020 00:30"
-      />
-
-      <ListItemText
-        className={classes.listItemText}
-        primary="Data Termino"
-        secondary={"13/07/2020 14:00"}
-      />
+      <Grid item xs={12}>
+        <ListItemText
+          className={classes.listItemText}
+          primary="Data Termino"
+          secondary={moment(task.dateEnd).format("DD/MM/YYYY HH:mm:ss")}
+        />
+      </Grid>
 
       <ListItemSecondaryAction className={classes.listItemAction}>
         <IconButton
           edge="start"
           aria-label="editar"
-          onClick={() => handleEditTask(task)}
+          onClick={() => handleEditTask(task, task.projectId)}
         >
           <EditIcon />
         </IconButton>

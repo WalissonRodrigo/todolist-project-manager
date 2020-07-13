@@ -1,5 +1,5 @@
-import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -8,6 +8,26 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import {
+  Container,
+  TextField,
+  Checkbox,
+  Select,
+  MenuItem,
+  InputLabel,
+} from "@material-ui/core";
+import moment from "moment";
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  formInLine: {
+    display: "flex",
+    flexDirection: "row",
+  },
+}));
 
 const styles = (theme) => ({
   root: {
@@ -55,11 +75,18 @@ const DialogActions = withStyles((theme) => ({
 
 export default function TaskDialog({
   open,
-  task = null,
-  projectId = null,
+  task,
+  projectId,
   handleClose,
   handleSave,
 }) {
+  const classes = useStyles();
+  const [taskNewEdit, setTaskNewEdit] = useState(task);
+  const [projectIdLocal, setProjectIdLocal] = useState(projectId);
+  useEffect(() => {
+    setTaskNewEdit(task);
+    setProjectIdLocal(projectId);
+  }, [task, projectId]);
   return (
     <Dialog
       onClose={handleClose}
@@ -67,23 +94,131 @@ export default function TaskDialog({
       open={open}
     >
       <DialogTitle id="task-dialog-title" onClose={handleClose}>
-        {task ? "Editar Tarefa" : "Criar Nova Tarefa"}
+        {task && "id" in task ? "Editar Tarefa" : "Criar Nova Tarefa"}
       </DialogTitle>
       <DialogContent dividers>
-        <Typography gutterBottom>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </Typography>
-        <Typography gutterBottom>
-          Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-          Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-        </Typography>
-        <Typography gutterBottom>
-          Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-          magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-          ullamcorper nulla non metus auctor fringilla.
-        </Typography>
+        <Container className={classes.form}>
+          <TextField
+            required
+            id="title-required"
+            label="Titulo"
+            value={taskNewEdit.title}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                title: event.currentTarget.value,
+              })
+            }
+          />
+          <TextField
+            required
+            id="comment-required"
+            label="Comentário"
+            value={taskNewEdit.comment}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                comment: event.currentTarget.value,
+              })
+            }
+          />
+          <TextField
+            required
+            id="owner-required"
+            label="Responsável"
+            value={taskNewEdit.owner}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                owner: event.currentTarget.value,
+              })
+            }
+          />
+          <TextField
+            required
+            id="dateStart-required"
+            label="Data de Inicio"
+            type="datetime-local"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={moment(taskNewEdit.dateStart).format(
+              "YYYY-MM-DD[T]HH:mm:ss"
+            )}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                dateStart: event.currentTarget.value,
+              })
+            }
+          />
+          <TextField
+            required
+            id="dateEnd-required"
+            label="Data de Termino"
+            value={moment(taskNewEdit.dateEnd).format("YYYY-MM-DD[T]HH:mm:ss")}
+            type="datetime-local"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                dateEnd: event.currentTarget.value,
+              })
+            }
+          />
+          <InputLabel id="priority-label-select">Prioridade</InputLabel>
+          <Select
+            required
+            labelId="priority-label-select"
+            id="priority-select"
+            value={taskNewEdit.priority}
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                priority: event.target.value,
+              })
+            }
+          >
+            <MenuItem value={1}>BAIXA</MenuItem>
+            <MenuItem value={2}>MÉDIA</MenuItem>
+            <MenuItem value={3}>ALTA</MenuItem>
+          </Select>
+          <TextField
+            required
+            id="progress-required"
+            label="Progresso (%)"
+            value={taskNewEdit.progress}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                progress: event.currentTarget.value,
+              })
+            }
+          />
+          <Container className={classes.formInLine}>
+            <InputLabel id="priority-label-select">Concluido?</InputLabel>
+            <Checkbox
+              id="conclusion"
+              label="Conclusão"
+              checked={taskNewEdit.conclusion}
+              onChange={() => {
+                setTaskNewEdit({
+                  ...taskNewEdit,
+                  conclusion: !taskNewEdit.conclusion,
+                });
+              }}
+              disableRipple
+            />
+          </Container>
+        </Container>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => handleClose()} color="secondary">
@@ -91,7 +226,10 @@ export default function TaskDialog({
         </Button>
         <Button
           autoFocus
-          onClick={() => handleSave(task, projectId)}
+          onClick={() => {
+            handleSave(taskNewEdit, projectIdLocal);
+            handleClose();
+          }}
           color="primary"
         >
           Salvar

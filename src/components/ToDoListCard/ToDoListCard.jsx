@@ -1,17 +1,14 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import todolist from "../../services/todolist";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  CardHeader,
   Card,
   CardContent,
   Typography,
   List,
   Button,
-  IconButton,
   Box,
   ListItem,
   Divider,
@@ -66,21 +63,35 @@ const ToDoListCard = ({ user }) => {
   const [dialogTask, setDialogTask] = useState(false);
   const [project, setProject] = useState({
     title: "Exemplo",
-    dateStart: "2020-07-13 00:00:00",
-    dateEnd: "2020-07-13 15:00:00",
+    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
   });
-  const [task, setTask] = useState(null);
+  const [task, setTask] = useState({
+    title: "Nova Tarefa",
+    comment: "Sugestão de nova tarefa",
+    owner: "Nome do Responsável",
+    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    priority: 1,
+    progress: 0,
+    conclusion: false,
+  });
   const [projectId, setProjectId] = useState(null);
 
-  const handleOpenDialogProject = (projectEdit = null) => {
+  const handleOpenDialogProject = (projectEdit) => {
     setProject(projectEdit);
     setDialogProject(true);
   };
 
   const handleCloseDialogProject = () => {
-    setProject(null);
+    setProject({
+      title: "",
+      dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+      dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+    });
     setDialogProject(false);
   };
+
   const handleOpenDialogTask = (task, projectId) => {
     setProjectId(projectId);
     setTask(task);
@@ -88,7 +99,16 @@ const ToDoListCard = ({ user }) => {
   };
 
   const handleCloseDialogTask = () => {
-    setTask(null);
+    setTask({
+      title: "",
+      comment: "",
+      owner: "",
+      dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+      dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+      priority: 1,
+      progress: 0,
+      conclusion: false,
+    });
     setDialogTask(false);
   };
 
@@ -130,8 +150,6 @@ const ToDoListCard = ({ user }) => {
             projects.push({
               id: doc.id,
               ...data,
-              dateStart: moment(data.dateEnd).format("DD/MM/YYYY HH:mm:ss"),
-              dateEnd: moment(data.dateEnd).format("DD/MM/YYYY HH:mm:ss"),
             });
           });
           firestore
@@ -142,7 +160,10 @@ const ToDoListCard = ({ user }) => {
                 let tasks = [];
                 snapshotTask.forEach((doc) => {
                   const data = doc.data();
-                  tasks.push({ id: doc.id, ...data });
+                  tasks.push({
+                    id: doc.id,
+                    ...data,
+                  });
                 });
                 setTodoList({
                   projects: projects,
@@ -171,7 +192,13 @@ const ToDoListCard = ({ user }) => {
                 startIcon={<AddIcon />}
                 variant="contained"
                 color="primary"
-                onClick={() => handleOpenDialogProject()}
+                onClick={() =>
+                  handleOpenDialogProject({
+                    title: "",
+                    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+                    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+                  })
+                }
               >
                 Adicionar Projeto
               </Button>
