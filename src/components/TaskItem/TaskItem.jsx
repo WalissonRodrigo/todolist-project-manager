@@ -66,6 +66,14 @@ const TaskItem = ({ task, handleDeleteTask, handleEditTask }) => {
 
       <ListItemText
         className={classes.listItemText}
+        primary="Prioridade"
+        secondary={
+          task.priority === 1 ? "BAIXA" : task.priority === 2 ? "MÉDIA" : "ALTA"
+        }
+      />
+
+      <ListItemText
+        className={classes.listItemText}
         primary="Concluído"
         secondary={`${task.progress}%`}
       />
@@ -86,7 +94,7 @@ const TaskItem = ({ task, handleDeleteTask, handleEditTask }) => {
         <IconButton
           edge="start"
           aria-label="editar"
-          onClick={() => handleEditTask(null, task.id, task.projectId)}
+          onClick={() => handleEditTask(task)}
         >
           <EditIcon />
         </IconButton>

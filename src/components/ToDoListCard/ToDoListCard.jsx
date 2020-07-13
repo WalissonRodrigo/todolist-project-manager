@@ -18,10 +18,12 @@ import {
   ListItemSecondaryAction,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+
 import TaskItem from "../TaskItem/TaskItem";
 import { firestore } from "../../firebase";
+import ProjectItem from "../ProjectItem";
+import ProjectDialog from "../ProjectDialog/ProjectDialog";
+import TaskDialog from "../TaskDialog/TaskDialog";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -58,12 +60,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TaskCard = ({ user }) => {
+const ToDoListCard = ({ user }) => {
   const [todoList, setTodoList] = useState({ projects: [], tasks: [] });
   const [dialogProject, setDialogProject] = useState(false);
   const [dialogTask, setDialogTask] = useState(false);
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState({
+    title: "Exemplo",
+    dateStart: "2020-07-13 00:00:00",
+    dateEnd: "2020-07-13 15:00:00",
+  });
   const [task, setTask] = useState(null);
+  const [projectId, setProjectId] = useState(null);
 
   const handleOpenDialogProject = (projectEdit = null) => {
     setProject(projectEdit);
@@ -74,24 +81,39 @@ const TaskCard = ({ user }) => {
     setProject(null);
     setDialogProject(false);
   };
-
-  const handleCreateProject = (project = null) => {
-    todolist.createProject(project);
+  const handleOpenDialogTask = (task, projectId) => {
+    setProjectId(projectId);
+    setTask(task);
+    setDialogTask(true);
   };
 
-  const handleCreateTask = (task = null, projectId) => {
-    todolist.createTask(task, projectId);
+  const handleCloseDialogTask = () => {
+    setTask(null);
+    setDialogTask(false);
+  };
+
+  const handleSaveProject = (project) => {
+    if (project && "id" in project) {
+      todolist.updateProject(project);
+    } else {
+      todolist.createProject(project);
+    }
   };
 
   const handleDeleteProject = (projectId) => {
     todolist.deleteProject(projectId);
   };
 
+  const handleSaveTask = (task, projectId) => {
+    if (task.projectId && task.id) {
+      todolist.updateTask(task);
+    } else if (projectId) {
+      todolist.createTask(task, projectId);
+    }
+  };
+
   const handleDeleteTask = (taskId) => {
     todolist.deleteTask(taskId);
-  };
-  const handleEditTask = (task, taskId, projectId) => {
-    todolist.updateTask(task, taskId, projectId);
   };
 
   const classes = useStyles();
@@ -127,14 +149,10 @@ const TaskCard = ({ user }) => {
                   tasks: tasks,
                 });
               },
-              (errorTasks) => {
-                // this.props.openSnackbar(todolist.getErrorFirebase(errorTasks));
-              }
+              (errorTasks) => {}
             );
         },
-        (errors) => {
-          // this.props.openSnackbar(todolist.getErrorFirebase(errors));
-        }
+        (errors) => {}
       );
   }, [user.uid]);
 
@@ -153,7 +171,7 @@ const TaskCard = ({ user }) => {
                 startIcon={<AddIcon />}
                 variant="contained"
                 color="primary"
-                onClick={() => handleCreateProject()}
+                onClick={() => handleOpenDialogProject()}
               >
                 Adicionar Projeto
               </Button>
@@ -161,44 +179,33 @@ const TaskCard = ({ user }) => {
           </List>
         </CardContent>
       </Card>
+      <ProjectDialog
+        open={dialogProject}
+        project={project}
+        handleClose={handleCloseDialogProject}
+        handleSave={handleSaveProject}
+      />
+      <TaskDialog
+        open={dialogTask}
+        task={task}
+        projectId={projectId}
+        handleClose={handleCloseDialogTask}
+        handleSave={handleSaveTask}
+      />
       <Typography gutterBottom variant="h5" component="h3">
         Tarefas
       </Typography>
+
       <Divider />
       {todoList
         ? todoList.projects.map((proj) => (
             <Card key={proj.id} className={classes.container}>
-              <List>
-                <ListItem>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    {proj.title + " "}
-                  </Typography>
-                </ListItem>
-                <ListItemSecondaryAction className={classes.listItemAction}>
-                  <IconButton
-                    color="primary"
-                    edge="start"
-                    aria-label="add new project"
-                    onClick={() => handleCreateTask(null, proj.id)}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                  <IconButton
-                    color="secondary"
-                    edge="start"
-                    aria-label="edit project"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete project"
-                    onClick={() => handleDeleteProject(proj.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </List>
+              <ProjectItem
+                project={proj}
+                handleCreateTask={handleOpenDialogTask}
+                handleUpdateProject={handleOpenDialogProject}
+                handleDeleteProject={handleDeleteProject}
+              />
               <Divider />
               <div>
                 <List dense={true}>
@@ -210,7 +217,7 @@ const TaskCard = ({ user }) => {
                             key={task.id}
                             task={task}
                             handleDeleteTask={handleDeleteTask}
-                            handleEditTask={handleEditTask}
+                            handleEditTask={handleOpenDialogTask}
                           />
                         ))
                     : null}
@@ -222,11 +229,11 @@ const TaskCard = ({ user }) => {
     </Box>
   );
 };
-TaskCard.defaultProps = {
+ToDoListCard.defaultProps = {
   context: "standalone",
 };
 
-TaskCard.propTypes = {
+ToDoListCard.propTypes = {
   user: PropTypes.object.isRequired,
 };
-export default TaskCard;
+export default ToDoListCard;

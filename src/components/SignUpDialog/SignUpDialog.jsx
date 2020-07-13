@@ -108,6 +108,7 @@ class SignUpDialog extends Component {
               this.setState({
                 performingAction: false,
               });
+              // window.location.reload();
             });
         }
       );
@@ -139,6 +140,7 @@ class SignUpDialog extends Component {
             this.setState({
               performingAction: false,
             });
+            // window.location.reload();
           });
       }
     );

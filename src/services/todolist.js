@@ -6,10 +6,10 @@ const todolist = {};
 
 todolist.createTask = (task, projectId) => {
   return new Promise((resolve, reject) => {
-    // if (!task) {
-    //   reject();
-    //   return;
-    // }
+    if (!task) {
+      reject();
+      return;
+    }
     const currentUser = auth.currentUser;
     if (!currentUser) {
       reject();
@@ -31,20 +31,7 @@ todolist.createTask = (task, projectId) => {
       priority,
       progress,
       conclusion,
-    } = task ?? {
-      title: "Tarefa Exemplo",
-      owner: "Fulano",
-      comment: "Aproveite ao máximo a vida",
-      dateStart: moment(),
-      dateEnd: moment(),
-      priority: 1,
-      progress: 10,
-      conclusion: false,
-    };
-    // if (!title || !owner || !comment || !dateStart || !dateEnd || !progress) {
-    //   reject();
-    //   return;
-    // }
+    } = task;
 
     const tasksDocumentReference = firestore.collection("tasks").doc();
     tasksDocumentReference
@@ -73,12 +60,12 @@ todolist.createTask = (task, projectId) => {
   });
 };
 
-todolist.updateTask = (task, taskId, projectId) => {
+todolist.updateTask = (task) => {
   return new Promise((resolve, reject) => {
-    // if (!task) {
-    //   reject();
-    //   return;
-    // }
+    if (!task) {
+      reject();
+      return;
+    }
     const currentUser = auth.currentUser;
     if (!currentUser) {
       reject();
@@ -100,39 +87,27 @@ todolist.updateTask = (task, taskId, projectId) => {
       priority,
       progress,
       conclusion,
-    } = task ?? {
-      title: "Tarefa Exemplo Updated",
-      owner: "Fulano",
-      comment: "Aproveite ao máximo a vida",
-      dateStart: moment(),
-      dateEnd: moment(),
-      priority: 2,
-      progress: 100,
-      conclusion: true,
-    };
-    // if (!title || !owner || !comment || !dateStart || !dateEnd || !progress) {
-    //   reject();
-    //   return;
-    // }
+    } = task;
 
-    const tasksDocumentReference = firestore.collection("tasks").doc(taskId);
+    const tasksDocumentReference = firestore.collection("tasks").doc(task.id);
     tasksDocumentReference
       .set({
         title: title,
         owner: owner,
         comment: comment,
-        dateStart: dateStart.format("X"),
-        dateEnd: dateEnd.format("X"),
+        dateStart: dateStart,
+        dateEnd: dateEnd,
         priority: priority,
         progress: progress,
         conclusion: conclusion,
         userId: uid,
-        projectId: projectId,
+        projectId: task.projectId,
       })
       .then((res) => {
-        analytics.logEvent("task_store", {
-          method: "add_new",
+        analytics.logEvent("task_update", {
+          method: "update",
           user: uid,
+          taskId: task.id,
         });
         resolve(res);
       })
@@ -144,16 +119,12 @@ todolist.updateTask = (task, taskId, projectId) => {
 
 todolist.createProject = (project) => {
   return new Promise((resolve, reject) => {
-    // if (!project) {
-    //   reject();
-    //   return;
-    // }
+    if (!project) {
+      reject();
+      return;
+    }
 
-    const { title, dateStart, dateEnd } = project ?? {
-      title: "Exemplo",
-      dateStart: moment(),
-      dateEnd: moment(),
-    };
+    const { title, dateStart, dateEnd } = project;
     if (!title || !dateStart || !dateEnd) {
       reject();
       return;
@@ -172,8 +143,8 @@ todolist.createProject = (project) => {
     }
     const newProject = {
       title: title,
-      dateStart: dateStart.format("x"),
-      dateEnd: dateEnd.format("x"),
+      dateStart: dateStart,
+      dateEnd: dateEnd,
       userId: uid,
     };
     const projectsDocumentReference = firestore.collection("projects").doc();
@@ -185,6 +156,50 @@ todolist.createProject = (project) => {
           user: uid,
         });
         resolve(proj);
+      })
+      .catch((failStore) => {
+        reject(failStore);
+      });
+  });
+};
+
+todolist.updateProject = (project) => {
+  return new Promise((resolve, reject) => {
+    if (!project) {
+      reject();
+      return;
+    }
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      reject();
+      return;
+    }
+
+    const uid = currentUser.uid;
+    if (!uid) {
+      reject();
+      return;
+    }
+
+    const { title, dateStart, dateEnd } = project;
+
+    const tasksDocumentReference = firestore
+      .collection("projects")
+      .doc(project.id);
+    tasksDocumentReference
+      .set({
+        title: title,
+        dateStart: dateStart,
+        dateEnd: dateEnd,
+        userId: uid,
+      })
+      .then((res) => {
+        analytics.logEvent("project_update", {
+          method: "update",
+          user: uid,
+          projectId: project.id,
+        });
+        resolve(res);
       })
       .catch((failStore) => {
         reject(failStore);

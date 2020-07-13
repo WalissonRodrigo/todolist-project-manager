@@ -12,7 +12,7 @@ import EmptyState from "../../components/EmptyState";
 
 // import { ReactComponent as CabinIllustration } from "../../assets/illustrations/cabin.svg";
 import { ReactComponent as InsertBlockIllustration } from "../../assets/illustrations/insert-block.svg";
-import TaskCard from "../../components/TaskCard/TaskCard";
+import ToDoListCard from "../../components/ToDoListCard/ToDoListCard";
 
 class HomePage extends Component {
   signInWithEmailLink = () => {
@@ -57,8 +57,7 @@ class HomePage extends Component {
     const { user } = this.props;
 
     if (user) {
-      // return <EmptyState image={<CabinIllustration />} />;
-      return <TaskCard {...this.props} />;
+      return <ToDoListCard {...this.props} />;
     }
 
     return (
