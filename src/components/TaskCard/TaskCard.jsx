@@ -90,8 +90,8 @@ const TaskCard = ({ user }) => {
   const handleDeleteTask = (taskId) => {
     todolist.deleteTask(taskId);
   };
-  const handleEditTask = (taskId) => {
-    todolist.updateTask(taskId);
+  const handleEditTask = (task, taskId, projectId) => {
+    todolist.updateTask(task, taskId, projectId);
   };
 
   const classes = useStyles();

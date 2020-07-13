@@ -73,7 +73,7 @@ todolist.createTask = (task, projectId) => {
   });
 };
 
-todolist.updateTask = (task, taskId) => {
+todolist.updateTask = (task, taskId, projectId) => {
   return new Promise((resolve, reject) => {
     // if (!task) {
     //   reject();
@@ -106,9 +106,9 @@ todolist.updateTask = (task, taskId) => {
       comment: "Aproveite ao máximo a vida",
       dateStart: moment(),
       dateEnd: moment(),
-      priority: 1,
-      progress: 10,
-      conclusion: false,
+      priority: 2,
+      progress: 100,
+      conclusion: true,
     };
     // if (!title || !owner || !comment || !dateStart || !dateEnd || !progress) {
     //   reject();
@@ -126,6 +126,8 @@ todolist.updateTask = (task, taskId) => {
         priority: priority,
         progress: progress,
         conclusion: conclusion,
+        userId: uid,
+        projectId: projectId,
       })
       .then((res) => {
         analytics.logEvent("task_store", {

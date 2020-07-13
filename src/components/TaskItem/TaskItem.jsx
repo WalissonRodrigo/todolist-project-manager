@@ -86,7 +86,7 @@ const TaskItem = ({ task, handleDeleteTask, handleEditTask }) => {
         <IconButton
           edge="start"
           aria-label="editar"
-          onClick={() => handleEditTask(task.id)}
+          onClick={() => handleEditTask(null, task.id, task.projectId)}
         >
           <EditIcon />
         </IconButton>
