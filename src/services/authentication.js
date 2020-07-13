@@ -1012,10 +1012,6 @@ authentication.getProfileCompletion = (fields) => {
     fields.email && fields.emailVerified,
   ];
 
-  if (!fields) {
-    return null;
-  }
-
   let profileCompletion = 0;
 
   fields.forEach((field) => {
