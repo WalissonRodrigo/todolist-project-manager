@@ -2,12 +2,12 @@ import React from "react";
 
 import ReactDOM from "react-dom";
 
-import ProjectDialog from "./ProjectDialog";
+import ProjectItem from "./ProjectItem";
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
 
-  ReactDOM.render(<ProjectDialog />, div);
+  ReactDOM.render(<ProjectItem />, div);
 
   ReactDOM.unmountComponentAtNode(div);
 });
