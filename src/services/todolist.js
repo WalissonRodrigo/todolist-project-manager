@@ -47,7 +47,7 @@ todolist.createTask = (task, projectId) => {
         projectId: projectId,
       })
       .then((res) => {
-        console.log("OK", projectId);
+        if (process.env.NODE_ENV !== "production") console.log("OK");
         analytics.logEvent("task_store", {
           method: "add_new",
           user: uid,
@@ -55,7 +55,7 @@ todolist.createTask = (task, projectId) => {
         resolve(res);
       })
       .catch((failStore) => {
-        console.log("FAIL");
+        if (process.env.NODE_ENV !== "production") console.log("FAIL");
         reject(failStore);
       });
   });
@@ -104,7 +104,7 @@ todolist.updateTask = (task) => {
         projectId: task.projectId,
       })
       .then((res) => {
-        console.log("OK", res);
+        if (process.env.NODE_ENV !== "production") console.log("OK");
         analytics.logEvent("task_update", {
           method: "update",
           user: uid,
@@ -113,7 +113,8 @@ todolist.updateTask = (task) => {
         resolve(res);
       })
       .catch((failStore) => {
-        console.log("FAIL", failStore);
+        if (process.env.NODE_ENV !== "production")
+          console.log("FAIL", failStore);
         reject(failStore);
       });
   });
@@ -153,6 +154,7 @@ todolist.createProject = (project) => {
     projectsDocumentReference
       .set(newProject)
       .then((proj) => {
+        if (process.env.NODE_ENV !== "production") console.log("OK");
         analytics.logEvent("project_store", {
           method: "add_new",
           user: uid,
@@ -160,6 +162,7 @@ todolist.createProject = (project) => {
         resolve(proj);
       })
       .catch((failStore) => {
+        if (process.env.NODE_ENV !== "production") console.log("FAIL");
         reject(failStore);
       });
   });
@@ -196,6 +199,7 @@ todolist.updateProject = (project) => {
         userId: uid,
       })
       .then((res) => {
+        if (process.env.NODE_ENV !== "production") console.log("OK");
         analytics.logEvent("project_update", {
           method: "update",
           user: uid,
@@ -204,6 +208,8 @@ todolist.updateProject = (project) => {
         resolve(res);
       })
       .catch((failStore) => {
+        if (process.env.NODE_ENV !== "production")
+          console.log("FAIL", failStore);
         reject(failStore);
       });
   });
@@ -265,17 +271,21 @@ todolist.getAll = () => {
               const data = doc.data();
               tasks.push({ id: doc.id, ...data });
             });
+            if (process.env.NODE_ENV !== "production") console.log("OK");
             resolve({
               projects: projects,
               tasks: tasks,
             });
           },
           (errorTasks) => {
+            if (process.env.NODE_ENV !== "production")
+              console.log("FAIL", errorTasks);
             reject(errorTasks);
           }
         );
       },
       (error) => {
+        if (process.env.NODE_ENV !== "production") console.log("FAIL", error);
         reject(error);
       }
     );

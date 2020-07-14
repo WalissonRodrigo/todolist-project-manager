@@ -129,9 +129,11 @@ const ToDoListCard = ({ user }) => {
 
   const handleSaveTask = (taskToStore, currentProjectId) => {
     if (taskToStore.projectId && taskToStore.id) {
-      todolist.updateTask(task).catch((ex) => console.log(ex));
+      todolist.updateTask(taskToStore).catch((ex) => console.log(ex));
     } else if (currentProjectId) {
-      todolist.createTask(task, projectId).catch((ex) => console.log(ex));
+      todolist
+        .createTask(taskToStore, currentProjectId)
+        .catch((ex) => console.log(ex));
     }
   };
 
