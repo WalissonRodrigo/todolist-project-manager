@@ -125,7 +125,9 @@ class SignInDialog extends Component {
                   );
                 })
                 .catch((reason) => {
-                  this.openSnackbar(authentication.getErrorFirebase(reason));
+                  this.props.openSnackbar(
+                    authentication.getErrorFirebase(reason)
+                  );
                 })
                 .finally(() => {
                   this.setState({
@@ -174,7 +176,7 @@ class SignInDialog extends Component {
               });
             })
             .catch((reason) => {
-              this.openSnackbar(authentication.getErrorFirebase(reason));
+              this.props.openSnackbar(authentication.getErrorFirebase(reason));
             })
             .finally(() => {
               this.setState({
@@ -188,7 +190,6 @@ class SignInDialog extends Component {
 
   sendSignInLinkToEmail = () => {
     const { emailAddress } = this.state;
-
     const errors = validate(
       {
         emailAddress: emailAddress,
@@ -222,7 +223,7 @@ class SignInDialog extends Component {
             });
           })
           .catch((reason) => {
-            this.openSnackbar(authentication.getErrorFirebase(reason));
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -247,12 +248,12 @@ class SignInDialog extends Component {
               const emailAddress = user.email;
 
               this.props.openSnackbar(
-                `Registrado como ${displayName || emailAddress}`
+                `Login realizado como ${displayName || emailAddress}`
               );
             });
           })
           .catch((reason) => {
-            this.openSnackbar(authentication.getErrorFirebase(reason));
+            this.props.openSnackbar(authentication.getErrorFirebase(reason));
           })
           .finally(() => {
             this.setState({
@@ -314,6 +315,48 @@ class SignInDialog extends Component {
 
     const { performingAction, emailAddress, password, errors } = this.state;
 
+    const GroupFieldsEmailPassword = () => (
+      <Grid container direction="column" spacing={2}>
+        <Grid item xs>
+          <TextField
+            autoComplete="email"
+            disabled={performingAction}
+            error={!!(errors && errors.emailAddress)}
+            fullWidth
+            helperText={
+              errors && errors.emailAddress ? errors.emailAddress[0] : ""
+            }
+            label="Endereço de e-mail"
+            placeholder="email@exemplo.com"
+            required
+            type="email"
+            value={emailAddress}
+            variant="outlined"
+            InputLabelProps={{ required: false }}
+            onChange={this.handleEmailAddressChange}
+          />
+        </Grid>
+
+        <Grid item xs>
+          <TextField
+            autoComplete="current-password"
+            disabled={performingAction}
+            error={!!(errors && errors.password)}
+            fullWidth
+            helperText={errors && errors.password ? errors.password[0] : ""}
+            label="Senha"
+            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+            required
+            type="password"
+            value={password}
+            variant="outlined"
+            InputLabelProps={{ required: false }}
+            onChange={this.handlePasswordChange}
+          />
+        </Grid>
+      </Grid>
+    );
+
     return (
       <Dialog
         fullWidth
@@ -353,49 +396,7 @@ class SignInDialog extends Component {
               </Grid>
 
               <Grid item xs={7}>
-                <Grid container direction="column" spacing={2}>
-                  <Grid item xs>
-                    <TextField
-                      autoComplete="email"
-                      disabled={performingAction}
-                      error={!!(errors && errors.emailAddress)}
-                      fullWidth
-                      helperText={
-                        errors && errors.emailAddress
-                          ? errors.emailAddress[0]
-                          : ""
-                      }
-                      label="Endereço de e-mail"
-                      placeholder="email@exemplo.com"
-                      required
-                      type="email"
-                      value={emailAddress}
-                      variant="outlined"
-                      InputLabelProps={{ required: false }}
-                      onChange={this.handleEmailAddressChange}
-                    />
-                  </Grid>
-
-                  <Grid item xs>
-                    <TextField
-                      autoComplete="current-password"
-                      disabled={performingAction}
-                      error={!!(errors && errors.password)}
-                      fullWidth
-                      helperText={
-                        errors && errors.password ? errors.password[0] : ""
-                      }
-                      label="Senha"
-                      placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                      required
-                      type="password"
-                      value={password}
-                      variant="outlined"
-                      InputLabelProps={{ required: false }}
-                      onChange={this.handlePasswordChange}
-                    />
-                  </Grid>
-                </Grid>
+                <GroupFieldsEmailPassword />
               </Grid>
             </Grid>
           </Hidden>
@@ -406,48 +407,7 @@ class SignInDialog extends Component {
               performingAction={performingAction}
               onAuthProviderClick={this.signInWithAuthProvider}
             />
-
-            <Grid container direction="column" spacing={2}>
-              <Grid item xs>
-                <TextField
-                  autoComplete="email"
-                  disabled={performingAction}
-                  error={!!(errors && errors.emailAddress)}
-                  fullWidth
-                  helperText={
-                    errors && errors.emailAddress ? errors.emailAddress[0] : ""
-                  }
-                  label="Endereço de E-mail"
-                  placeholder="email@exemplo.com"
-                  required
-                  type="email"
-                  value={emailAddress}
-                  variant="outlined"
-                  InputLabelProps={{ required: false }}
-                  onChange={this.handleEmailAddressChange}
-                />
-              </Grid>
-
-              <Grid item xs>
-                <TextField
-                  autoComplete="current-password"
-                  disabled={performingAction}
-                  error={!!(errors && errors.password)}
-                  fullWidth
-                  helperText={
-                    errors && errors.password ? errors.password[0] : ""
-                  }
-                  label="Senha"
-                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                  required
-                  type="password"
-                  value={password}
-                  variant="outlined"
-                  InputLabelProps={{ required: false }}
-                  onChange={this.handlePasswordChange}
-                />
-              </Grid>
-            </Grid>
+            <GroupFieldsEmailPassword />
           </Hidden>
         </DialogContent>
 

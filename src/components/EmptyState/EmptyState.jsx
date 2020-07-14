@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { Box, Typography } from "@material-ui/core";
 
-function EmptyState(props) {
+const BoxContent = (props) => {
   let imageWidth;
   let imageHeight;
   let variant;
@@ -33,7 +33,37 @@ function EmptyState(props) {
       variant = "h5";
       break;
   }
+  return (
+    <span>
+      {props.image && (
+        <Box
+          clone
+          mb={props.title || props.description ? 2 : 0}
+          width={`${imageWidth}%`}
+          height={`${imageHeight}%`}
+        >
+          {props.image}
+        </Box>
+      )}
 
+      {props.title && (
+        <Box mb={!props.description && props.button ? 2 : 0}>
+          <Typography variant={variant}>{props.title}</Typography>
+        </Box>
+      )}
+
+      {props.description && (
+        <Box mb={props.button && 2}>
+          <Typography variant="body1">{props.description}</Typography>
+        </Box>
+      )}
+
+      {props.button}
+    </span>
+  );
+};
+
+function EmptyState(props) {
   if (props.type === "page") {
     return (
       <Box
@@ -43,30 +73,7 @@ function EmptyState(props) {
         left="50%"
         textAlign="center"
       >
-        {props.image && (
-          <Box
-            clone
-            mb={props.title || props.description ? 2 : 0}
-            width={`${imageWidth}%`}
-            height={`${imageHeight}%`}
-          >
-            {props.image}
-          </Box>
-        )}
-
-        {props.title && (
-          <Box mb={!props.description && props.button ? 2 : 0}>
-            <Typography variant={variant}>{props.title}</Typography>
-          </Box>
-        )}
-
-        {props.description && (
-          <Box mb={props.button && 2}>
-            <Typography variant="body1">{props.description}</Typography>
-          </Box>
-        )}
-
-        {props.button}
+        <BoxContent {...props} />
       </Box>
     );
   }
@@ -74,30 +81,7 @@ function EmptyState(props) {
   if (props.type === "card") {
     return (
       <Box padding={props.padding} textAlign="center">
-        {props.image && (
-          <Box
-            clone
-            mb={props.title || props.description ? 2 : 0}
-            width={`${imageWidth}%`}
-            height={`${imageHeight}%`}
-          >
-            {props.image}
-          </Box>
-        )}
-
-        {props.title && (
-          <Box mb={!props.description && props.button ? 2 : 0}>
-            <Typography variant={variant}>{props.title}</Typography>
-          </Box>
-        )}
-
-        {props.description && (
-          <Box mb={props.button && 2}>
-            <Typography variant="body1">{props.description}</Typography>
-          </Box>
-        )}
-
-        {props.button}
+        <BoxContent {...props} />
       </Box>
     );
   }
