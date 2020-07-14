@@ -62,18 +62,18 @@ todolist.createTask = (task, projectId) => {
 todolist.updateTask = (task) => {
   return new Promise((resolve, reject) => {
     if (!task) {
-      reject();
+      reject("Campos obrigatórios não preenchidos");
       return;
     }
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      reject();
+      reject("Sua sessão expirou. Faça login novamente.");
       return;
     }
 
     const uid = currentUser.uid;
     if (!uid) {
-      reject();
+      reject("Algo de errado aconteceu com seu usuário. Faça login novamente.");
       return;
     }
 
@@ -124,19 +124,19 @@ todolist.createProject = (project) => {
 
     const { title, dateStart, dateEnd } = project;
     if (!title || !dateStart || !dateEnd) {
-      reject();
+      reject("Campos obrigatórios não preenchidos");
       return;
     }
 
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      reject();
+      reject("Sua sessão expirou. Faça login novamente.");
       return;
     }
 
     const uid = currentUser.uid;
     if (!uid) {
-      reject();
+      reject("Algo de errado aconteceu com seu usuário. Faça login novamente.");
       return;
     }
     const newProject = {
@@ -164,18 +164,18 @@ todolist.createProject = (project) => {
 todolist.updateProject = (project) => {
   return new Promise((resolve, reject) => {
     if (!project) {
-      reject();
+      reject("Campos obrigatórios não preenchidos");
       return;
     }
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      reject();
+      reject("Sua sessão expirou. Faça login novamente.");
       return;
     }
 
     const uid = currentUser.uid;
     if (!uid) {
-      reject();
+      reject("Algo de errado aconteceu com seu usuário. Faça login novamente.");
       return;
     }
 
