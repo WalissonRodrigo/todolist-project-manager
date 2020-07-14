@@ -23,11 +23,18 @@ const useStyles = makeStyles((theme) => ({
   form: {
     display: "flex",
     flexDirection: "column",
+    justifyContent: "space-between",
+    padding: "4px !important",
   },
   formInLine: {
     display: "flex",
     flexDirection: "row",
     alignContent: "center",
+    alignItems: "center",
+    padding: 12,
+  },
+  input: {
+    padding: 12,
   },
 }));
 
@@ -96,6 +103,7 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
         <Container className={classes.form}>
           <TextField
             required
+            className={classes.input}
             id="title-required"
             label="Titulo"
             value={taskNewEdit.title}
@@ -109,6 +117,7 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
           />
           <TextField
             required
+            className={classes.input}
             id="comment-required"
             label="Comentário"
             value={taskNewEdit.comment}
@@ -122,6 +131,7 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
           />
           <TextField
             required
+            className={classes.input}
             id="owner-required"
             label="Responsável"
             value={taskNewEdit.owner}
@@ -135,6 +145,7 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
           />
           <TextField
             required
+            className={classes.input}
             id="dateStart-required"
             label="Data de Inicio"
             type="datetime-local"
@@ -154,6 +165,7 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
           />
           <TextField
             required
+            className={classes.input}
             id="dateEnd-required"
             label="Data de Termino"
             value={moment(taskNewEdit.dateEnd).format("YYYY-MM-DD[T]HH:mm:ss")}
@@ -169,9 +181,27 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
               })
             }
           />
-          <InputLabel id="priority-label-select">Prioridade</InputLabel>
+
+          <TextField
+            required
+            className={classes.input}
+            id="progress-required"
+            label="Progresso (%)"
+            value={taskNewEdit.progress}
+            variant="filled"
+            onChange={(event) =>
+              setTaskNewEdit({
+                ...taskNewEdit,
+                progress: event.currentTarget.value,
+              })
+            }
+          />
+          <InputLabel className={classes.input} id="priority-label-select">
+            Prioridade
+          </InputLabel>
           <Select
             required
+            style={{ marginLeft: 12, marginRight: 12 }}
             labelId="priority-label-select"
             id="priority-select"
             value={taskNewEdit.priority}
@@ -186,19 +216,6 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
             <MenuItem value={2}>MÉDIA</MenuItem>
             <MenuItem value={3}>ALTA</MenuItem>
           </Select>
-          <TextField
-            required
-            id="progress-required"
-            label="Progresso (%)"
-            value={taskNewEdit.progress}
-            variant="filled"
-            onChange={(event) =>
-              setTaskNewEdit({
-                ...taskNewEdit,
-                progress: event.currentTarget.value,
-              })
-            }
-          />
           <Container className={classes.formInLine}>
             <InputLabel id="priority-label-select">Concluido?</InputLabel>
             <Checkbox

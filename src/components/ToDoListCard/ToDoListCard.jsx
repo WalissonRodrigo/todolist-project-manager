@@ -3,17 +3,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import todolist from "../../services/todolist";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Card,
-  CardContent,
-  Typography,
-  List,
-  Button,
-  Box,
-  ListItem,
-  Divider,
-  ListItemSecondaryAction,
-} from "@material-ui/core";
+import { Card, Typography, List, Box, Divider, Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
 import TaskItem from "../TaskItem/TaskItem";
@@ -25,6 +15,19 @@ import TaskDialog from "../TaskDialog/TaskDialog";
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: 12,
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "column",
+  },
+  containerFlex: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+  },
+  margin: {
+    margin: theme.spacing(1),
   },
   grow: {
     flexGrow: 1,
@@ -126,9 +129,9 @@ const ToDoListCard = ({ user }) => {
 
   const handleSaveTask = (taskToStore, currentProjectId) => {
     if (taskToStore.projectId && taskToStore.id) {
-      todolist.updateTask(task);
+      todolist.updateTask(task).catch((ex) => console.log(ex));
     } else if (currentProjectId) {
-      todolist.createTask(task, projectId);
+      todolist.createTask(task, projectId).catch((ex) => console.log(ex));
     }
   };
 
@@ -173,33 +176,6 @@ const ToDoListCard = ({ user }) => {
 
   return (
     <Box className={classes.container}>
-      <Card>
-        <CardContent>
-          <List>
-            <ListItem>
-              <Typography gutterBottom variant="h5" component="h3">
-                Gerenciar Projetos
-              </Typography>
-            </ListItem>
-            <ListItemSecondaryAction className={classes.listItemAction}>
-              <Button
-                startIcon={<AddIcon />}
-                variant="contained"
-                color="primary"
-                onClick={() =>
-                  handleOpenDialogProject({
-                    title: "",
-                    dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
-                    dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
-                  })
-                }
-              >
-                Adicionar Projeto
-              </Button>
-            </ListItemSecondaryAction>
-          </List>
-        </CardContent>
-      </Card>
       <ProjectDialog
         open={dialogProject}
         project={project}
@@ -213,10 +189,25 @@ const ToDoListCard = ({ user }) => {
         handleClose={handleCloseDialogTask}
         handleSave={handleSaveTask}
       />
-      <Typography gutterBottom variant="h5" component="h3">
-        Tarefas
-      </Typography>
-
+      <Box className={classes.containerFlex}>
+        <Typography gutterBottom variant="h5" component="h3">
+          Projetos e Tarefas
+        </Typography>
+        <Fab
+          className={classes.margin}
+          color="primary"
+          aria-label="add project"
+          onClick={() =>
+            handleOpenDialogProject({
+              title: "",
+              dateStart: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+              dateEnd: moment().format("YYYY-MM-DD[T]HH:mm:ss"),
+            })
+          }
+        >
+          <AddIcon />
+        </Fab>
+      </Box>
       <Divider />
       {todoList
         ? todoList.projects.map((proj) => (

@@ -7,18 +7,18 @@ const todolist = {};
 todolist.createTask = (task, projectId) => {
   return new Promise((resolve, reject) => {
     if (!task) {
-      reject();
+      reject("Campos obrigatórios não preenchidos");
       return;
     }
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      reject();
+      reject("Sua sessão expirou. Faça login novamente.");
       return;
     }
 
     const uid = currentUser.uid;
     if (!uid) {
-      reject();
+      reject("Algo de errado aconteceu com seu usuário. Faça login novamente.");
       return;
     }
 
@@ -47,6 +47,7 @@ todolist.createTask = (task, projectId) => {
         projectId: projectId,
       })
       .then((res) => {
+        console.log("OK", projectId);
         analytics.logEvent("task_store", {
           method: "add_new",
           user: uid,
@@ -54,6 +55,7 @@ todolist.createTask = (task, projectId) => {
         resolve(res);
       })
       .catch((failStore) => {
+        console.log("FAIL");
         reject(failStore);
       });
   });
@@ -102,6 +104,7 @@ todolist.updateTask = (task) => {
         projectId: task.projectId,
       })
       .then((res) => {
+        console.log("OK", res);
         analytics.logEvent("task_update", {
           method: "update",
           user: uid,
@@ -110,6 +113,7 @@ todolist.updateTask = (task) => {
         resolve(res);
       })
       .catch((failStore) => {
+        console.log("FAIL", failStore);
         reject(failStore);
       });
   });
