@@ -129,7 +129,11 @@ const ProjectDialog = ({ open, project, handleClose, handleSave }) => {
         </Container>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose()} color="secondary">
+        <Button
+          onClick={() => handleClose()}
+          color="secondary"
+          variant="outlined"
+        >
           Cancelar
         </Button>
         <Button
@@ -139,6 +143,7 @@ const ProjectDialog = ({ open, project, handleClose, handleSave }) => {
             handleSave(projectNewEdit);
           }}
           color="primary"
+          variant="outlined"
         >
           Salvar
         </Button>

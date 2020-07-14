@@ -234,7 +234,11 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
         </Container>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose()} color="secondary">
+        <Button
+          onClick={() => handleClose()}
+          color="secondary"
+          variant="outlined"
+        >
           Cancelar
         </Button>
         <Button
@@ -244,6 +248,7 @@ const TaskDialog = ({ open, task, projectId, handleClose, handleSave }) => {
             handleClose();
           }}
           color="primary"
+          variant="outlined"
         >
           Salvar
         </Button>
@@ -273,7 +278,7 @@ TaskDialog.propTypes = {
   // Properties
   open: PropTypes.bool.isRequired,
   task: PropTypes.object.isRequired,
-  projectId: PropTypes.number.isRequired,
+  // projectId: PropTypes.number.isRequired,
 
   // Events
   handleClose: PropTypes.func.isRequired,
